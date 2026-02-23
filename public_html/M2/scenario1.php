@@ -14,8 +14,7 @@ $array4 = [9, 9, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0];
 function printOdds($arr, $arrayNumber)
 {
     // Only make edits between the designated "Start" and "End" comments
-    echo "<div class='problem-item'>";
-    printScenario1ArrayInfo($arr, $arrayNumber);
+   
     // This should be solved without Copilot auto-completion, to toggle it, click the Copilot chat bubble at the top of the editor.
     //  Configure inline suggestions to "Disabled Inline Suggestions" (or similar) when writing code for this problem.
     
