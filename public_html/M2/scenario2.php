@@ -3,7 +3,7 @@
 // @ts-nocheck
 require_once "base.php";
 
-$ucid = "mt85"; // <-- set your ucid
+$ucid = "eg278"; // <-- set your ucid
 
 // Don't edit the arrays below, they are used to test your code
 $array1 = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6];
@@ -15,9 +15,9 @@ $array5 = [M_PI, M_E, sqrt(2), sqrt(3), sqrt(5), log(2), log10(3)];
 
 function sumValues($arr, $arrayNumber)
 {
-    echo "<div class='problem-item'>";
+    
     // Only make edits between the designated "Start" and "End" comments
-    printScenario2ArrayInfo($arr, $arrayNumber);
+   
     // This should be solved without Copilot auto-completion, to toggle it, click the Copilot chat bubble at the top of the editor.
     //  Configure inline suggestions to "Disabled Inline Suggestions" (or similar) when writing code for this problem.
     
@@ -45,17 +45,14 @@ function sumValues($arr, $arrayNumber)
     $modifiedTotal = number_format($total, 2);
 
     // End Solution Edits
-    printScenario2Output($total, $modifiedTotal);
-    echo "</div>";
+    echo $modifiedTotal;
+    echo "<br>";
 }
 
 // Run the problem
-printHeader($ucid, 2);
-echo "<div class='scenario2-grid'>";
+
 sumValues($array1, 1);
 sumValues($array2, 2);
 sumValues($array3, 3);
 sumValues($array4, 4);
 sumValues($array5, 5);
-echo "</div>";
-printFooter($ucid, 2);
