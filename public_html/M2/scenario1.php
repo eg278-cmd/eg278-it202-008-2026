@@ -2,7 +2,7 @@
 // copilot: disable
 // @ts-nocheck
 require_once "base.php";
-require_once "../../partials/functions.php";
+
 $ucid = "eg278"; // <-- set your ucid
 
 // Don't edit the arrays below, they are used to test your code
@@ -27,7 +27,7 @@ function printOdds($arr, $arrayNumber)
     
     $output_result = "";
     // Start Solution Edits
-    // (eg278 - 2/22/26)
+    // Plan (eg278 - 2/22/26)
     // 1. Loop through the array.
     // 2. Make sure each number is odd.
     // 3. Put theodd numbers in a temporary array.
