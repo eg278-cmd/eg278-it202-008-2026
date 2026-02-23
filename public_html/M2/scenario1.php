@@ -2,7 +2,7 @@
 // copilot: disable
 // @ts-nocheck
 require_once "base.php";
-require_once "../partials/functions.php";
+require_once "../../partials/functions.php";
 $ucid = "eg278"; // <-- set your ucid
 
 // Don't edit the arrays below, they are used to test your code
