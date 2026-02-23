@@ -30,7 +30,7 @@ function printOdds($arr, $arrayNumber)
     // Plan (eg278 - 2/22/26)
     // 1. Loop through the array.
     // 2. Make sure each number is odd.
-    // 3. Put theodd numbers in a temporary array.
+    // 3. Put the odd numbers in a temporary array.
     // 4. Convert the array to a comma-separated string.
     // 5. Assign the string to $output_result.
 
@@ -43,19 +43,17 @@ function printOdds($arr, $arrayNumber)
             $oddValues[] = $value;
         }
     }
-   
+    // Convert odd values to comma-separated string
+    $output_result = implode(", ", $oddValues);
     // End Solution Edits
-    printScenario1Output($output_result);
-    echo "</div>";
+    echo $output_result;
+    echo "<br>";
 }
 
 // Run the problem
-printHeader($ucid, 1);
-echo "<div class='scenario1-grid'>";
+
 
 printOdds($array1, 1);
 printOdds($array2, 2);
 printOdds($array3, 3);
 printOdds($array4, 4);
-echo "</div>";
-printFooter($ucid, 1);
