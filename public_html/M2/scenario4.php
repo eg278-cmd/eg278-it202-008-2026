@@ -66,14 +66,16 @@ function transformText($arr, $arrayNumber) {
             $placeholderForMiddleCharacters = substr($stepC, $mid - 1, 2);
         }
     }
+
+    }
+
+}
+
          // End Solution Edits
     
         printScenario4Transformations($index, $placeholderForModifiedPhrase, $placeholderForMiddleCharacters);
-        
-    }
+        echo "</div>";
 
-    echo "</div>";
-}
 
 // Run the problem
 
