@@ -58,7 +58,7 @@ function transformText($arr, $arrayNumber) {
 }
 
 // Run the problem
-printHeader($ucid, 4);
+
 echo "<div class='scenario4-grid'>";
 transformText($array1, 1);
 transformText($array2, 2);
