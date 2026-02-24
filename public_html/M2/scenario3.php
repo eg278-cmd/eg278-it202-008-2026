@@ -14,8 +14,9 @@ $array5 = [-1, 1, 2.0, -2.0, "3", "-3.0"];
 
 function bePositive($arr, $arrayNumber)
 {
-    
+     echo "<div class='problem-item'>";
     // Only make edits between the designated "Start" and "End" comments
+     printScenario3ArrayInfo($arr, $arrayNumber);
    
     // This should be solved without Copilot auto-completion, to toggle it, click the Copilot chat bubble at the top of the editor.
     //  Configure inline suggestions to "Disabled Inline Suggestions" (or similar) when writing code for this problem.
@@ -49,15 +50,18 @@ function bePositive($arr, $arrayNumber)
     }
 
     // End Solution Edits
-    echo $output;
-    echo "<br>";
+    printScenario3Output($output);
+    echo "</div>";
     
 }
 
 // Run the problem
-
+printHeader($ucid, 3);
+echo "<div class='scenario3-grid'>";
 bePositive($array1, 1);
 bePositive($array2, 2);
 bePositive($array3, 3);
 bePositive($array4, 4);
 bePositive($array5, 5);
+echo "</div>";
+printFooter($ucid, 3);
