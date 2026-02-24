@@ -39,23 +39,43 @@ function transformText($arr, $arrayNumber) {
         // 4. Replace duplicate spaces with a single space.
         // 5. Assign final result to $placeholderForModifiedPhrase.
 
-        $stepA = preg_replace('/[^0-9a-zA-Z ]/', '', $phrase);
+        // Challenge 1: remove non‑alphanumeric except spaces
+    $stepA = preg_replace('/[^0-9a-zA-Z ]/', '', $text);
 
-        $stepB = ucwords(strtolower($stepA));
+    // Challenge 2: convert to Title Case
+    $stepB = ucwords(strtolower($stepA));
 
-        $stepC = preg_replace('/\s+/', '', $stepB);
-        $stepC = trim($stepC);
+    // Challenge 3: trim + collapse duplicate spaces
+    $stepC = preg_replace('/\s+/', ' ', trim($stepB));
 
-        $placeholderForModifiedPhrase = $stepC;
+    $placeholderForModifiedPhrase = $stepC;
 
-        // End Solution Edits
-    
-        printScenario4Transformations($index, $placeholderForModifiedPhrase, $placeholderForMiddleCharacters);
-        
+    // Challenge 4: extract middle characters
+    $len = strlen($stepC);
+
+    if ($len < 3) {
+        $placeholderForMiddleCharacters = "Not enough characters";
+    } else {
+        $mid = intdiv($len, 2);
+
+        if ($len % 2 == 1) {
+            // odd length → take middle ±1 (3 chars)
+            $placeholderForMiddleCharacters = substr($stepC, $mid - 1, 3);
+        } else {
+            // even length → take middle two chars
+            $placeholderForMiddleCharacters = substr($stepC, $mid - 1, 2);
+        }
     }
 
-    echo "</div>";
+    }
+
 }
+
+         // End Solution Edits
+    
+        printScenario4Transformations($index, $placeholderForModifiedPhrase, $placeholderForMiddleCharacters);
+        echo "</div>";
+
 
 // Run the problem
 
