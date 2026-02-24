@@ -16,7 +16,7 @@ $array4 = ["hello world", "php programming", "short", "a", "even"];
 function transformText($arr, $arrayNumber) {
     echo "<div class='problem-item'>";
     // Only make edits between the designated "Start" and "End" comments
-    printScenario4ArrayInfo($arr, $arrayNumber);
+    
     // This should be solved without Copilot auto-completion, to toggle it, click the Copilot chat bubble at the top of the editor.
     //  Configure inline suggestions to "Disabled Inline Suggestions" (or similar) when writing code for this problem.
    
