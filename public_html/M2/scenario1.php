@@ -14,7 +14,12 @@ $array4 = [9, 9, 8, 8, 7, 7, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 0, 0];
 function printOdds($arr, $arrayNumber)
 {
     // Only make edits between the designated "Start" and "End" comments
+<<<<<<< HEAD
+    echo "<div class='problem-item'>";
+    printScenario1ArrayInfo($arr, $arrayNumber);
+=======
    
+>>>>>>> 7f3891187c71ada85c6135848e89d26f6681cc7d
     // This should be solved without Copilot auto-completion, to toggle it, click the Copilot chat bubble at the top of the editor.
     //  Configure inline suggestions to "Disabled Inline Suggestions" (or similar) when writing code for this problem.
     
@@ -26,10 +31,17 @@ function printOdds($arr, $arrayNumber)
     
     $output_result = "";
     // Start Solution Edits
+<<<<<<< HEAD
+    // (eg278 - 2/22/26)
+    // 1. Loop through the array.
+    // 2. Make sure each number is odd.
+    // 3. Put theodd numbers in a temporary array.
+=======
     // Plan (eg278 - 2/22/26)
     // 1. Loop through the array.
     // 2. Make sure each number is odd.
     // 3. Put the odd numbers in a temporary array.
+>>>>>>> 7f3891187c71ada85c6135848e89d26f6681cc7d
     // 4. Convert the array to a comma-separated string.
     // 5. Assign the string to $output_result.
 
@@ -42,6 +54,17 @@ function printOdds($arr, $arrayNumber)
             $oddValues[] = $value;
         }
     }
+<<<<<<< HEAD
+   
+    // End Solution Edits
+    printScenario1Output($output_result);
+    echo "</div>";
+}
+
+// Run the problem
+printHeader($ucid, 1);
+echo "<div class='scenario1-grid'>";
+=======
     // Convert odd values to comma-separated string
     $output_result = implode(", ", $oddValues);
     // End Solution Edits
@@ -51,8 +74,14 @@ function printOdds($arr, $arrayNumber)
 
 // Run the problem
 
+>>>>>>> 7f3891187c71ada85c6135848e89d26f6681cc7d
 
 printOdds($array1, 1);
 printOdds($array2, 2);
 printOdds($array3, 3);
 printOdds($array4, 4);
+<<<<<<< HEAD
+echo "</div>";
+printFooter($ucid, 1);
+=======
+>>>>>>> 7f3891187c71ada85c6135848e89d26f6681cc7d
