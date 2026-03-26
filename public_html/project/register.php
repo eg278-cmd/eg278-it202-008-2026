@@ -1,3 +1,6 @@
+<?php
+require(__DIR__."/../../lib/functions.php");
+?>
 <h3>Register</h3>
 <form onsubmit="return validate(this)" method="POST">
     <div>
@@ -26,9 +29,9 @@
  //TODO 2: add PHP Code
  if (isset($_POST["email"], $_POST["password"], $_POST["confirm"])) {
 
-    $email = $_POST["email"];
-    $password = $_POST["password"];
-    $confirm = $_POST["confirm"];
+    $email = se($_POST, "email", "", false);
+    $password = se($_POST, "password", "", false);
+    $confirm = se($_POST, "confirm", "", false);
     // TODO 3: validate/use
 }
 ?>
