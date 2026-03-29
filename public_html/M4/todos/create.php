@@ -18,7 +18,25 @@ if (empty($diff)) {
     // When not valid, provide a user-friendly message of what specifically was wrong and set $is_valid to false.
     // Assigned should check for "self" if a valid format/value isn't provided.
     // Start validations
-    // can edit here
+    // Validate task 
+    if (empty($task)) {
+        echo "Task can not be empty. <br>"; 
+        $is_valid = false;
+    }
+    // Validate due date (must be valid MYSQL date format YYYY-MM-DD)
+    if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $due)) {
+        echo "Due date must be in YYYY-MM-DD format, <br>";
+        $is_valid = false;
+    }
+    // Validate assigned (must be 'self')
+    if (empty($assigned)) {
+        echo "Assigned value was empty - defaulting to 'self'.<br>";
+        $assigned = "self";
+    }
+    if ($assigned !== "self" && strlen(trim($assigned)) === 0) {
+        echo "Assigned value was invalid - defaulting to 'self'.<br>";
+        $assigned = 'self';
+    }
     // End validations
 
     
@@ -58,13 +76,24 @@ if (empty($diff)) {
     <?php require_once(__DIR__ . "/../nav.php"); ?>
     <section>
         <h2>Create ToDo </h2>
-        <form>
-            <!-- design the form with proper labels and input fields with the correct types based on the SQL table.
-             Wrap each label/input pair in a div tag.
-             For "Assigned" ensure the default value is "self". -->
-          
+        <form method="GET">
             <div>
-                <input type="submit" />
+                <label for="task">Task</label>
+                <input type+"text" id+"task" name="task" required>
+            <div>
+
+            <div> 
+                <label for="due">Due Date</label>
+                <input type="date" id="due" name="due" required>
+            </div>
+
+            <div>
+                <label for="assigned">Assigned To</label>
+                <input type="text" id="assigned" name="assigned" value="self" required>
+            </div>
+
+             <div>
+                <input type="submit" value="Create Todo">
             </div>
         </form>
     </section>
