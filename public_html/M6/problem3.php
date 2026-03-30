@@ -50,7 +50,28 @@ function joinArrays($users, $activities) {
     // TODO Objective: Add logic to join both arrays on the userId property into one $joined array
     $joined = []; // result array
     // Start edits
-    
+    // UCID: eg278
+    // Date: 03/30/2026
+    // Plan: 
+    // 1. Form a lookup table of users by userId
+    // 2. Loop through activities at a time
+    // 3. Merge user data and activity data into one record
+    // 4. Put all merged record into $joined
+
+    // Lookup table for users
+    $userLookup = [];
+    foreach ($users as $use) {
+        $userLookup[$use["userId"]] = $use;
+    }
+     
+    // Loop through activities
+    foreach ($activities as $act) {
+        $id = $act["userId"];
+
+        if (isset($userLookup[$id])) {
+            $joined[] = array_merge($userLookup[$id], $act);
+        }
+    }
 
     // End edits
     echo "<pre>" . var_export($joined, true) . "</pre>";
