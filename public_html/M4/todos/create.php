@@ -46,8 +46,13 @@ if (empty($diff)) {
         Ensure valid and proper PDO named placeholders are used.
         https://phpdelusions.net/pdo
         */
-        $query = ""; // edit this
-        $params = []; // Apply the proper PDO placeholder to variable mapping here
+        $query = "INSERT INTO M4_Todos (task, due, assigned) 
+                  VALUES (:task, :due, :assigned)";
+        $params = [
+            ":task"     => $task,
+            ":due"      => $due,
+            ":assigned"  => $assigned
+        ]; // Apply the proper PDO placeholder to variable mapping here
         try {
             $db = getDB();
             $stmt = $db->prepare($query);
@@ -58,12 +63,13 @@ if (empty($diff)) {
                 echo "Failed to insert";
             }
         } catch (PDOException $e) {
-            // extra credit
-            // check if the exception was related to a unique constraint
-            // provide an appropriate user-friendly message for this scenario
-            // Otherwise show the default message below
-            echo "There was an error inserting the record; check the logs (terminal)";
-            error_log("Insert Error: " . var_export($e, true)); // shows in the terminal
+           // Check if it's a unique constraint error
+           if (isset($e->errorInfo[1]) && $e->errorInfo[1] == 1062) {
+            echo "A todo with this task and due date already exists. Choose a different combination";
+           } else{
+            echo "There was an error inserting the record check the logs (terminal). Try again.";
+           }
+           error_log("Insert Error: " . var_export($e, true)); // shows in the terminal
         }
     } else {
         error_log("Creation input wasn't valid");
