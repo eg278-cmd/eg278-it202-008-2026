@@ -19,7 +19,7 @@ if (empty($diff)) {
     // Assigned should check for "self" if a valid format/value isn't provided.
     // Start validations
     // Validate task 
-    if (empty($task)) {
+     if (empty($task)) {
         echo "Task can not be empty. <br>"; 
         $is_valid = false;
     }
@@ -36,7 +36,7 @@ if (empty($diff)) {
     if ($assigned !== "self" && strlen(trim($assigned)) === 0) {
         echo "Assigned value was invalid - defaulting to 'self'.<br>";
         $assigned = 'self';
-    }
+    } 
     // End validations
 
     
