@@ -1,0 +1,159 @@
+<!--
+Challenge 3: Carousel Layout with Swiping
+-----------------------------------------
+Requirements:
+    Using CSS adjust the layout per the following rules
+    1. Header should be at the top
+    2. Carousel should take up full width
+    3. Buttons should be centered
+    Using JavaScript solve the following
+    1. Attach appropriate event listeners to each button
+    2. Cycle through each panel showing only 1 at a time
+    3. Ensure that the panels loop when reaching the last or first one
+    4. Extra credit: Allow mouse swipe on the carousel to cycle through the panels similar to how the buttons would work 
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carousel UI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="challenge3">
+    <nav>
+        <ul>
+            <li><a href="challenge1.html">Challenge 1</a></li>
+            <li><a href="challenge2.html" >Challenge 2</a></li>
+            <li><a href="challenge3.html" class="active">Challenge 3</a></li>
+        </ul>
+    </nav>
+    <!-- Edit your UCID here -->
+    <header>Header Section (eg278)</header>
+    <!-- Don't make any other edits to the HTML -->
+    <nav>
+        <button>Previous</button>
+        <button>Next</button>
+    </nav>
+
+    <div class="carousel">
+        <div class="carousel-container">
+            <div class="panel"><div>Panel 0:
+                <ul>
+                    <li>CSS Layout Requirements:
+                        <ul>
+                            <li>Header should be at the top</li>
+                            <li>Carousel should take up full width</li>
+                            <li>Buttons should be centered</li>
+                            <li>Carousel panels should fill the full height of the carousel</li>
+                            <li>Carousel content should be centered (vertical and horizontal)</li>
+                        </ul>
+                    </li>
+                    <li>JavaScript Functionality Requirements:
+                        <ul>
+                            <li>Attach appropriate event listeners to each button</li>
+                            <li>Cycle through each panel showing only 1 at a time</li>
+                            <li>Ensure that the panels loop when reaching the last or first one</li>
+                            <li>Extra credit: Allow mouse swipe on the carousel to cycle through the panels similar to how the buttons would work</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            </div>
+            <div class="panel"><div>Panel 1: HTML Forms</div></div>
+            <div class="panel"><div>Panel 2: CSS Grid</div></div>
+            <div class="panel"><div>Panel 3: JavaScript Events</div></div>
+            <div class="panel"><div>Panel 4: Responsive Design</div></div>
+            <div class="panel"><div>Panel 5: Accessibility Best Practices</div></div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="util.js"></script>
+
+<script>
+      const panels = document.querySelectorAll(".panel");
+    const container = document.querySelector(".carousel-container");
+
+    const backButton = document.querySelectorAll("nav button")[0];
+    const nextButton = document.querySelectorAll("nav button")[1];
+
+    let index = 0
+
+    // Update carousel position
+    function updateCarousel() {
+        container.style.transform = 'translateX(-${index * 100})'
+    }
+    
+    // Next button
+    nextButton.addEventListener("click", () => {
+        index++;
+        if (index >= panels.length) index = 0; // loop to first
+        updateCarousel();
+    })
+
+    // Back button
+    backButton.addEventListener("click", () => {
+        index--;
+        if (index < 0) index = panels.length -1; // loop to first
+        updateCarousel();
+    })
+</script>
+
+<style>
+    /* Challenge 3 Solution - UCID: eg278 3/2/26 */
+    /* Header remains at the top */
+    header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10;
+    }
+
+    /* Space under header */
+    body.challenge3 {
+        margin-top: 60px; /* aligns with header height */
+    }
+
+    /* Center both back and next buttons */
+    body.challenge3 > nav {
+        display: flex;
+        content: center;
+        gap: 20px;
+        margin: 10px;
+    }
+
+    /* Carousel takes full width */
+    .carousel {
+        width: 100%;
+        height: 300px; /* fixed height for visibility */
+        overflow: hidden;
+        position: relative;
+        border: 2px solid black;
+    }
+
+    /* Container holds all panels horizontally */
+    .carousel-container {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.5s
+    }
+
+    /* Each panel fill the carousel */
+    .panel {
+        width: 100%;
+        height: 100%;
+        flex: 0;
+        display: flex;
+        content: center; /* center is horizontal */
+        align-items: center; /* center is vertical */
+        font-size: 24px;
+        border-right: 2px solid black;
+    }
+</style>
