@@ -85,7 +85,7 @@ if (empty($diff)) {
         <form method="GET">
             <div>
                 <label for="task">Task</label>
-                <input type+"text" id="task" name="task" required>
+                <input type="text" id="task" name="task" required>
             <div>
 
             <div> 
