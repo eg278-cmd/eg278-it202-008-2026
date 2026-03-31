@@ -2,7 +2,8 @@
 require_once(__DIR__ . "/../../../lib/db.php"); 
 
 // Get the ID from the URL
-$id = $_GET["id"] ?? -1;
+if (isset($_GET["id"])) {
+$id = $_GET["id"];
 
 // Connect to DB
 $db = getDB();
@@ -19,6 +20,7 @@ $stmt->execute([":id" => $id]);
 // Redirect so the page reloads cleanly
 header("Location: completed.php");
 exit;
+}
 ?>
 
 <?php
