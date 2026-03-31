@@ -72,20 +72,21 @@ try {
             <tbody>
                 <?php foreach ($results as $r): ?>
                     <tr>
-                        <?php foreach ($r as $key => $val): ?>
-                            <?php if ($key == "days_offset"): ?>
-                                <?php if ($val >= 0): ?>
-                                    <td><?php echo "Completed $val day(s)"; ?></td>
+                        <td><?=  $r["id"] ?></td>
+                        <td><?=  $r["task"] ?></td>
+                        <td><?=  $r["due"] ?></td>
+                        <td><?=  $r["completed_date"] ?></td>
+                        <td>
+                            <?php if ($r["days_offset"] >= 0): ?>
+                                Completed <?= $r["days_offset"] ?> day(s)
                                 <?php else: ?>
-                                    <td><?php echo "Overdue by " . abs($val) . " day(s)"; ?></td>
+                                   Overdue by <?= abs($r["days_offset"]) ?> day(s)
                                 <?php endif; ?>
-
-                            <?php else: ?>
-                                <td><?php echo $val; ?></td>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
+                            </td>
+                        <td><?= $r["assigned"] ?></td>
                     </tr>
                 <?php endforeach; ?>
+
                 <?php if (count($results) === 0): ?>
                     <tr>
                         <td colspan="100%">No results</td>
