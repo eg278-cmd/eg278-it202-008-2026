@@ -41,6 +41,9 @@ if (empty($diff)) {
 
     
     if ($is_valid) {
+        error_log("Creation input wasn't valid");
+        exit;
+    }
         /*
         Design a query to insert the incoming data to the proper columns.
         Ensure valid and proper PDO named placeholders are used.
