@@ -33,7 +33,7 @@ if (empty($diff)) {
         echo "Assigned value was empty - defaulting to 'self'.<br>";
         $assigned = "self";
     }
-    if ($assigned !== "self" && strlen(trim($assigned)) === 0) {
+    if ($assigned !== "self") {
         echo "Assigned value was invalid - defaulting to 'self'.<br>";
         $assigned = "self";
         exit;
