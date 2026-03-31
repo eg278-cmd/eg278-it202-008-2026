@@ -1,6 +1,26 @@
 <?php
 require_once(__DIR__ . "/../../../lib/db.php"); ?>
 
+// Get the ID from the URL
+$id = $_GET["id"] ?? -1;
+
+// Connect to DB
+$db = getDB();
+
+$query = "UPDATE M4_Todos
+          SET is_complete = 1,
+          completed = CURRENT_TIMESTAMP
+          WHERE id = :id
+          AND is_complete = 0";
+
+$stmt = $db->prepare($update_query);
+$stmt->execute([":id" => $id]);
+
+// Redirect so the page reloads cleanly
+header("Location: completed.php");
+exit;
+?>
+
 <?php
 $db = getDB();
 
