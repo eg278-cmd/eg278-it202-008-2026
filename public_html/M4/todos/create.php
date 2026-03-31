@@ -40,7 +40,7 @@ if (empty($diff)) {
     // End validations
 
     
-    if ($is_valid) {
+    if (!$is_valid) {
         error_log("Creation input wasn't valid");
         exit;
     }
