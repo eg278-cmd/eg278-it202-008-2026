@@ -13,7 +13,7 @@ $query = "UPDATE M4_Todos
           WHERE id = :id
           AND is_complete = 0";
 
-$stmt = $db->prepare($update_query);
+$stmt = $db->prepare($query);
 $stmt->execute([":id" => $id]);
 
 // Redirect so the page reloads cleanly
@@ -33,10 +33,13 @@ No limit is required.
 */
 $db = getDB();
 
-$query = "SELECT id, task, due, assigned, completed
+$query = "SELECT id, task, 
+          DATE(completed) AS completed_date,
+          DATEDDIFF(CURRENT_DATE, DATE(completed)) AS days_offset,
+          assigned, due
           FROM M4_Todos
           WHERE is_complete = 1
-          ORDER BY completed DESC"; 
+          ORDER BY completed DESC, due DESC"; 
 $results = [];
 try {
     $stmt = $db->prepare($query);
