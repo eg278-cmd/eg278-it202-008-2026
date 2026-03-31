@@ -35,7 +35,7 @@ if (empty($diff)) {
     }
     if ($assigned !== "self" && strlen(trim($assigned)) === 0) {
         echo "Assigned value was invalid - defaulting to 'self'.<br>";
-        $assigned = 'self';
+        $assigned = "self";
         exit;
     } 
     // End validations
