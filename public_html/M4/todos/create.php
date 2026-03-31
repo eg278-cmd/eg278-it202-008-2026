@@ -77,7 +77,7 @@ if (empty($diff)) {
     } else {
         error_log("Creation input wasn't valid");
     }
-}
+
 ?>
 <html>
 
