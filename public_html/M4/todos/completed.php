@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . "/../../../lib/db.php"); ?>
+require_once(__DIR__ . "/../../../lib/db.php"); 
 
 // Get the ID from the URL
 $id = $_GET["id"] ?? -1;
@@ -35,7 +35,7 @@ $db = getDB();
 
 $query = "SELECT id, task, 
           DATE(completed) AS completed_date,
-          DATEDDIFF(CURRENT_DATE, DATE(completed)) AS days_offset,
+          DATEDIFF(CURRENT_DATE, DATE(completed)) AS days_offset,
           assigned, due
           FROM M4_Todos
           WHERE is_complete = 1
