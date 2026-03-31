@@ -85,17 +85,17 @@ if (empty($diff)) {
         <form method="GET">
             <div>
                 <label for="task">Task</label>
-                <input type="text" id="task" name="task" required>
+                <input type="text" id="task" name="task">
             <div>
 
             <div> 
                 <label for="due">Due Date</label>
-                <input type="date" id="due" name="due" required>
+                <input type="date" id="due" name="due" placeholder="YYYY-MM-DD">
             </div>
 
             <div>
                 <label for="assigned">Assigned To</label>
-                <input type="text" id="assigned" name="assigned" value="self" required>
+                <input type="text" id="assigned" name="assigned" value="self">
             </div>
 
              <div>
