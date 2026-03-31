@@ -12,10 +12,11 @@ if (isset($_POST["id"])) {
     Add an extra clause to update only if the complete field of the record is not set.
     https://phpdelusions.net/pdo
     */
-    $query = "SELECT id, task, due, assigned, created
-              FROM M4_Todos
-              WHERE is_complete = 0
-              ORDER BY due ASC"; 
+    $query = "UPDATE M4_Todos
+              SET is_complete = 1,
+              completed = CURRENT_TIMESTAMP
+              WHERE id = :id
+              AND is_complete = 0"; 
     $params = []; // apply mapping
     
     try {
