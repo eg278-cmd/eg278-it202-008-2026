@@ -37,7 +37,8 @@ $db = getDB();
 
 $query = "SELECT
                id,
-               task, 
+               task,
+               due, 
               DATE(completed) AS completed_date,
               DATEDIFF(CURRENT_DATE, DATE(completed)) AS days_offset,
               assigned
