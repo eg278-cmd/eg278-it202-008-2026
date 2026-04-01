@@ -17,7 +17,7 @@ if (isset($_POST["id"])) {
               completed = CURRENT_TIMESTAMP
               WHERE id = :id
               AND is_complete = 0"; 
-    $params = []; // apply mapping
+    $params = [":id" => $id]; // apply mapping
     
     try {
         $stmt = $db->prepare($query);
