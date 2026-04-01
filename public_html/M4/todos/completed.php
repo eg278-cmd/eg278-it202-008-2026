@@ -1,5 +1,27 @@
 <?php
-require_once(__DIR__ . "/../../../lib/db.php"); ?>
+require_once(__DIR__ . "/../../../lib/db.php"); 
+
+// Get the ID from the URL
+if (isset($_GET["id"])) {
+$id = $_GET["id"];
+
+// Connect to DB
+$db = getDB();
+
+$query = "UPDATE M4_Todos
+          SET is_complete = 1,
+          completed = CURRENT_TIMESTAMP
+          WHERE id = :id
+          AND is_complete = 0";
+
+$stmt = $db->prepare($query);
+$stmt->execute([":id" => $id]);
+
+// Redirect so the page reloads cleanly
+header("Location: completed.php");
+exit;
+}
+?>
 
 <?php
 $db = getDB();
@@ -13,10 +35,16 @@ No limit is required.
 */
 $db = getDB();
 
-$query = "SELECT id, task, due, assigned, completed
+$query = "SELECT
+               id,
+               task,
+               due, 
+              DATE(completed) AS completed_date,
+              DATEDIFF(CURRENT_DATE, DATE(completed)) AS days_offset,
+              assigned
           FROM M4_Todos
           WHERE is_complete = 1
-          ORDER BY completed DESC"; 
+          ORDER BY completed DESC, due DESC"; 
 $results = [];
 try {
     $stmt = $db->prepare($query);
@@ -49,20 +77,21 @@ try {
             <tbody>
                 <?php foreach ($results as $r): ?>
                     <tr>
-                        <?php foreach ($r as $key => $val): ?>
-                            <?php if ($key == "days_offset"): ?>
-                                <?php if ($val >= 0): ?>
-                                    <td><?php echo "Completed $val day(s)"; ?></td>
+                        <td><?=  $r["id"] ?></td>
+                        <td><?=  $r["task"] ?></td>
+                        <td><?=  $r["due"] ?></td>
+                        <td><?=  $r["completed_date"] ?></td>
+                        <td>
+                            <?php if ($r["days_offset"] >= 0): ?>
+                                Completed <?= $r["days_offset"] ?> day(s)
                                 <?php else: ?>
-                                    <td><?php echo "Overdue by " . abs($val) . " day(s)"; ?></td>
+                                   Overdue by <?= abs($r["days_offset"]) ?> day(s)
                                 <?php endif; ?>
-
-                            <?php else: ?>
-                                <td><?php echo $val; ?></td>
-                            <?php endif; ?>
-                        <?php endforeach; ?>
+                            </td>
+                        <td><?= $r["assigned"] ?></td>
                     </tr>
                 <?php endforeach; ?>
+
                 <?php if (count($results) === 0): ?>
                     <tr>
                         <td colspan="100%">No results</td>

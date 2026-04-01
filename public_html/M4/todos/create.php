@@ -33,14 +33,17 @@ if (empty($diff)) {
         echo "Assigned value was empty - defaulting to 'self'.<br>";
         $assigned = "self";
     }
-    if ($assigned !== "self" && strlen(trim($assigned)) === 0) {
+    if ($assigned !== "self") {
         echo "Assigned value was invalid - defaulting to 'self'.<br>";
-        $assigned = 'self';
+        $assigned = "self";
     } 
     // End validations
 
     
-    if ($is_valid) {
+    if (!$is_valid) {
+        error_log("Creation input wasn't valid");
+        exit;
+    }
         /*
         Design a query to insert the incoming data to the proper columns.
         Ensure valid and proper PDO named placeholders are used.
@@ -74,7 +77,7 @@ if (empty($diff)) {
     } else {
         error_log("Creation input wasn't valid");
     }
-}
+
 ?>
 <html>
 
@@ -85,17 +88,17 @@ if (empty($diff)) {
         <form method="GET">
             <div>
                 <label for="task">Task</label>
-                <input type+"text" id+"task" name="task" required>
+                <input type="text" id="task" name="task">
             <div>
 
             <div> 
                 <label for="due">Due Date</label>
-                <input type="date" id="due" name="due" required>
+                <input type="date" id="due" name="due" placeholder="YYYY-MM-DD">
             </div>
 
             <div>
                 <label for="assigned">Assigned To</label>
-                <input type="text" id="assigned" name="assigned" value="self" required>
+                <input type="text" id="assigned" name="assigned" value="self">
             </div>
 
              <div>
