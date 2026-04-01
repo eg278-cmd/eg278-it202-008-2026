@@ -37,8 +37,8 @@ $db = getDB();
 
 $query = "SELECT id, task, 
           DATE(completed) AS completed_date,
-          DATEDIFF(DUE_DATE, DATE(completed)) AS days_offset,
-          assigned, due
+          DATEDIFF(due, completed) AS days_offset,
+          assigned, due,
           FROM M4_Todos
           WHERE is_complete = 1
           ORDER BY completed DESC, due DESC"; 
