@@ -52,7 +52,7 @@ if (isset($_POST["email"], $_POST["password"], $_POST["confirm"], $_POST["userna
         flash("Invalid email address.", "danger");
         $hasError = true;
     }
-    if (!preg_match('/^[a-z0-9-_]{3,30}$/', $username)) {
+    if (!is_valid_username($username)) {
         flash("Username must be lowercase, alphanumerical, can only contain _ or -, and be between 3 to 30 characters", "danger");
         $hasError = true;
     }
@@ -69,13 +69,13 @@ if (isset($_POST["email"], $_POST["password"], $_POST["confirm"], $_POST["userna
         $hasError = true;
     }
 
-    if (strlen($password) < 8) {
+    if (!is_valid_password($password)) {
         //echo "Password too short<br>";
         flash("Password must be at least 8 characters long.", "danger");
         $hasError = true;
     }
 
-    if ($password !== $confirm) {
+    if (!is_valid_confirm($password, $confirm)) {
         //echo "Passwords must match<br>";
         flash("Passwords must match.", "danger");
         $hasError = true;
@@ -91,7 +91,11 @@ if (isset($_POST["email"], $_POST["password"], $_POST["confirm"], $_POST["userna
             $stmt->execute([':email' => $email, ':password' => $hashed_password, ':username'=>$username]);
             //echo "Successfully registered!<br>";
             flash("Successfully registered! You can now log in.", "success");
-        } catch (Exception $e) {
+        } 
+        catch(PDOException $e){
+              users_check_duplicate($e);
+        }
+        catch (Exception $e) {
             //echo "There was an error registering<br>"; // user-friendly message
             flash("There was an error registering. Please try again.", "danger");
             error_log("Registration Error: " . var_export($e, true)); // log the technical error for debugging
@@ -101,4 +105,5 @@ if (isset($_POST["email"], $_POST["password"], $_POST["confirm"], $_POST["userna
 ?>
 <?php
 require(__DIR__ . "/../../partials/flash.php");
+reset_session();
 ?>
