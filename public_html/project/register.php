@@ -23,8 +23,21 @@ require(__DIR__ . "/../../partials/nav.php");
 </form>
 <script>
     function validate(form) {
-        //TODO 1: implement JavaScript validation (you'll do this on your own towards the end of Milestone1)
-        //ensure it returns false for an error and true for success
+        let password = form.password.value;
+        let confirm = form.confirm.value;
+
+        // Password must contain at least a number
+        let hasNumber = /\d/.test(password);
+        if (!hasNumber) {
+            alert("Password must contain at least a number.");
+            return false;
+        }
+
+        // Passwords must match
+        if (password !== confirm) {
+            alert("Passwords must match.");
+            return false;
+        }
 
         return true;
     }
