@@ -44,7 +44,7 @@ if (isset($_POST["email"], $_POST["password"])) {
     $hasError = false;
 
     if (empty($email)) {
-        flash("Email or username is required.", "danger");
+        flash("Email is required.", "danger");
         $hasError = true;
     }
     if (str_contains($email, "@")) {
