@@ -22,7 +22,7 @@ require(__DIR__ . "/../../partials/nav.php");
 
         // Email and username can't be empty
         if (email.length === 0) {
-            alert("Email or usernname is required."); 
+            alert("Email or username is required."); 
             return false;
         }
 
