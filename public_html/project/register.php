@@ -23,12 +23,27 @@ require(__DIR__ . "/../../partials/nav.php");
 </form>
 <script>
     function validate(form) {
+        let username = form.username.value.trim();
+        let email = form.email.value.trim();
         let password = form.password.value;
         let confirm = form.confirm.value;
 
+        // Username can be lowercase, alphanumeric, 3-30 characters
+        let usernameRegex = /^[a-z0-9_-]{3,30}$/;
+        if (!usernameRegex.test(username)) {
+            alert("Username must be lowercase, alphanumeric, and 3-30 characters.");
+            return false;
+        }
+
+        // Email format
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+         if (!emailRegex.test(email)) {
+            alert("Invalid email format.");
+            return false;
+         }
+
         // Password must contain at least a number
-        let hasNumber = /\d/.test(password);
-        if (!hasNumber) {
+        if (!/\d/.test(password)) {
             alert("Password must contain at least a number.");
             return false;
         }

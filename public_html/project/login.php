@@ -17,7 +17,20 @@ require(__DIR__ . "/../../partials/nav.php");
     function validate(form) {
         //TODO 1: implement JavaScript validation (you'll do this on your own towards the end of Milestone1)
         //ensure it returns false for an error and true for success
+        let email = form.email.value.trim();
+        let password = form.password.value.trim();
 
+        // Email and username can't be empty
+        if (email.length === 0) {
+            alert("Email or usernname is required."); 
+            return false;
+        }
+
+        if (password.length === 0) {
+            alert("Password is required.");
+            return false;
+        }
+        
         return true;
     }
 </script>
@@ -31,7 +44,7 @@ if (isset($_POST["email"], $_POST["password"])) {
     $hasError = false;
 
     if (empty($email)) {
-        flash("Email/Username must not be empty.", "danger");
+        flash("Email or username is required.", "danger");
         $hasError = true;
     }
     if (str_contains($email, "@")) {
