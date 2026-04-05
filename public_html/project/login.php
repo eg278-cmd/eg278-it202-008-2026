@@ -67,7 +67,7 @@ if (isset($_POST["email"], $_POST["password"])) {
 
 
     if (empty($password)) {
-        flash("Password must not be empty.", "danger");
+        flash("Password is required.", "danger");
         $hasError = true;
     }
 
