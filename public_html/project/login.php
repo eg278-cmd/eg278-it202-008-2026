@@ -1,7 +1,8 @@
 <?php
+// Load functions without nav.php yet
 require(__DIR__ . "/../../lib/functions.php");
 
-// If user is already logged in, redirect before nav.php outputs HTML
+// Redirect before nav.php outputs HTML
 if (is_logged_in()) {
     header("Location: landing.php");
     exit;
