@@ -1,20 +1,5 @@
 <?php
-require(__DIR__ . "/../../lib/functions.php");
-
-if (is_logged_in()) {
-    header("Location: landing.php");
-    exit;
-}
- if (isset($_POST["email"], $_POST["password"])) {
-
-    if (is_logged_in) {
-        header("Location: landing.php");
-        exit;
-    }
- }
-
-
-require(__DIR__ . "/../../partials/nav.php");
+require_once(__DIR__ . "/../../partials/nav.php");
 ?>
 <h3>Login</h3>
 <form onsubmit="return validate(this)" method="POST">

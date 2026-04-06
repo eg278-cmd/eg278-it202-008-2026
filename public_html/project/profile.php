@@ -176,6 +176,9 @@ if (isset($_POST["currentPassword"], $_POST["newPassword"], $_POST["confirmPassw
 
 <script>
     function validate(form) {
+
+        let email = form.email.value.trim();
+        let username = form.username.value.trim();
         let pw = form.newPassword.value;
         let con = form.confirmPassword.value;
         let isValid = true;
@@ -184,6 +187,25 @@ if (isset($_POST["currentPassword"], $_POST["newPassword"], $_POST["confirmPassw
         //example of using flash via javascript
         //find the flash container, create a new element, appendChild
         // NOTE: we'll extract the flash code to a function later
+         let usernameRegex = /^[a-z0-9_-]{3,30}$/;
+        if (!usernameRegex.test(username)) {
+            flash("Username must be lowercase, alphanumeric, and can only contain _ or -", "warning");
+            isValid = false;
+        }
+
+        // Email format
+        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+         if (!emailRegex.test(email)) {
+            flash("Invalid email format", "warning");
+            isValid = false;
+         }
+
+         // Password format must have at least 8 characters
+         if (pw.length > 0 &&  pw.length < 8) {
+            flash("Password must be at least 8 characters", "warning");
+            isValid = false;
+         }
+
         if (pw !== con) { // first JS validation example
             flash("Password and Confirm password must match", "warning");
             isValid = false;
