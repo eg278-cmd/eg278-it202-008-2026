@@ -1,5 +1,5 @@
 <?php
-require(__DIR__ . "/../../partials/nav.php");
+require(__DIR__ . "/../../lib/functions.php");
 
 // If user is already logged in, redirect before nav.php outputs HTML
 if (is_logged_in()) {
