@@ -54,7 +54,7 @@
 /* Update the below for Milestone 1 requirements */
 nav li {
     display: inline;
-    background-color: rebeccapurple;
+    background-color: black;
 }
 
 nav li a {
@@ -62,7 +62,7 @@ nav li a {
     padding: .25rem;
 }
 nav li a:hover {
-    color: pink;
+    color: white;
 }
 
 nav::after {
@@ -92,7 +92,7 @@ form,h3 {
 
 body {
     background-color: rgb(0, 68, 48);
-    color: rgb(255, 19, 235);
+    color: rgb(25, 19, 235);
 }
 input[type="submit"]:hover {
     transform: scale(1.15)
