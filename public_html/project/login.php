@@ -1,12 +1,4 @@
 <?php
-// Load functions without nav.php yet
-require(__DIR__ . "/../../lib/functions.php");
-
-// Redirect before nav.php outputs HTML
-if (is_logged_in()) {
-    header("Location: landing.php");
-    exit;
-}
 require(__DIR__ . "/../../partials/nav.php");
 ?>
 <h3>Login</h3>
