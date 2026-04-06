@@ -20,7 +20,7 @@ require(__DIR__ . "/../../partials/nav.php");
         let email = form.email.value.trim();
         let password = form.password.value.trim();
 
-        // Email and username can't be empty
+        // Email or username can't be empty
         if (email.length === 0) {
             alert("Email or username is required."); 
             return false;
