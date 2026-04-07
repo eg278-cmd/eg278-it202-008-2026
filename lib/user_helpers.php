@@ -23,8 +23,9 @@ function is_logged_in($redirect = false, $destination = "login.php")
             $path = $BASE_PATH . $path; // prepend the base path
         } // the else part is for absolute paths
 
-        die(header("Location: $path"));
-    }
+        (header("Location: $path"));
+        exit;
+    }   
     return $isLoggedIn;
 }
 function has_role($role)
