@@ -1,5 +1,4 @@
 <?php
-
 // checking to see if domain has a port number attached (localhost)
 $domain = $_SERVER["HTTP_HOST"];
 if (strpos($domain, ":")) {
@@ -24,7 +23,7 @@ session_start();
 require_once(__DIR__."/../lib/functions.php");
 ?>
 <link rel="stylesheet" href="<?php get_url('styles.css', true);?>">
-<script src="<?php get_url('helpers.js', true);?>"></script>
+<script src="<?php get_url('helpers.js', true); ?>"></script>
 
 <nav>
     <ul>
