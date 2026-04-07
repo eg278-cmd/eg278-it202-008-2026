@@ -187,15 +187,15 @@ if (isset($_POST["currentPassword"], $_POST["newPassword"], $_POST["confirmPassw
         //example of using flash via javascript
         //find the flash container, create a new element, appendChild
         // NOTE: we'll extract the flash code to a function later
-         let usernameRegex = /^[a-z0-9_-]{3,30}$/;
-        if (!usernameRegex.test(username)) {
+         username = /^[a-z0-9_-]{3,30}$/;
+        if (!username.test(username)) {
             flash("Username must be lowercase, alphanumeric, and can only contain _ or -", "warning");
             isValid = false;
         }
 
         // Email format
-        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-         if (!emailRegex.test(email)) {
+         email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+         if (!email.test(email)) {
             flash("Invalid email format", "warning");
             isValid = false;
          }

@@ -25,6 +25,7 @@ require_once(__DIR__."/../lib/functions.php");
 ?>
 <link rel="stylesheet" href="<?php get_url('styles.css', true);?>">
 <script src="<?php get_url('helpers.js', true);?>"></script>
+
 <nav>
     <ul>
         <?php if (is_logged_in()) : ?>

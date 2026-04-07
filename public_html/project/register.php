@@ -29,15 +29,15 @@ require(__DIR__ . "/../../partials/nav.php");
         let confirm = form.confirm.value;
 
         // Username can be lowercase, alphanumeric, 3-30 characters
-        let usernameRegex = /^[a-z0-9_-]{3,30}$/;
-        if (!usernameRegex.test(username)) {
+         username = /^[a-z0-9_-]{3,30}$/;
+        if (!username.test(username)) {
             alert("Username must be lowercase, alphanumeric, and 3-30 characters.");
             return false;
         }
 
         // Email format
-        let emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-         if (!emailRegex.test(email)) {
+        email = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+         if (!email.test(email)) {
             alert("Invalid email format.");
             return false;
          }
