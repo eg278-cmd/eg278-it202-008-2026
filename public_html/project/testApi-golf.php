@@ -1,10 +1,10 @@
 <?php
 // UCID: eg278 04/16/2026
 echo "<pre>";
-print_r(scandir(__DIR__ . '/../../../'));
+print_r(scandir(__DIR__ . '/../../'));
 echo "</pre>";
 
-require_once(__DIR__ . "/../../../lib/load_api_keys.php");
+require_once(__DIR__ . "/../../lib/load_api_keys.php");
 
 $host = getenv("GOLF_API_HOST");
 $key =  getenv("GOLF_API_KEY");
