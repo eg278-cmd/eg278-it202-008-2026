@@ -79,7 +79,7 @@ input {
     padding: 10px;
 }
 input:hover{
-    transform: rotateZ(10deg);
+    transform: rotateZ(0);
 }
 form,h3 {
     display: flex;
