@@ -1,5 +1,6 @@
 <?php
-require(__DIR__ . "/../../partials/nav.php");
+require_once(__DIR__ . "/../../load_api_keys.php");
+
 
 $result = [];
 if (isset($_GET["keyword"])) {

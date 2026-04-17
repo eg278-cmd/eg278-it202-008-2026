@@ -1,5 +1,6 @@
 <?php
 // UCID: eg278 04/16/2026
+require_once(__DIR__ . "/../../partials/nav.php");
 
 $host = getenv("GOLF_API_KEY");
 $key =  getenv("GOLF_API_KEY");
