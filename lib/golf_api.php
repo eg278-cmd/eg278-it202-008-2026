@@ -9,31 +9,22 @@
  */
 
 /**
- * Fetches the stock quote for a given symbol.
+ * Fetches the golf tournament schedule for a given org and year.
  */
-function fetch_quote($symbol)
+function fetch_golf_schedule($orgId = 1, $year = 2024)
 {
-    $data = ["function" => "GLOBAL_QUOTE", "symbol" => $symbol, "datatype" => "json"];
-    $endpoint = "https://alpha-vantage.p.rapidapi.com/query";
+    $data = [
+        "orgId" => $orgId, 
+        "year"  => $year
+    ];
+    $endpoint = "https://live-golf-data.p.rapidapi.com/schedule";
     $isRapidAPI = true;
-    $rapidAPIHost = "alpha-vantage.p.rapidapi.com";
-    $result = get($endpoint, "STOCK_API_KEY", $data, $isRapidAPI, $rapidAPIHost);
+    $rapidAPIHost = "live-golf-data.p.rapidapi.com";
+
+    $result = get($endpoint, "GOLF_API_KEY", $data, $isRapidAPI, $rapidAPIHost);
+    error_log("GOLF API RESPONSE: " . var_export($result, true));
     //example of cached data to save the quotas, don't forget to comment out the get() if using the cached data for testing
-    /* $result = ["status" => 200, "response" => '{
-        "Global Quote": {
-            "01. symbol": "MSFT",
-            "02. open": "420.1100",
-            "03. high": "422.3800",
-            "04. low": "417.8400",
-            "05. price": "421.4400",
-            "06. volume": "17861855",
-            "07. latest trading day": "2024-04-02",
-            "08. previous close": "424.5700",
-            "09. change": "-3.1300",
-            "10. change percent": "-0.7372%"
-        }
-    }'];*/
-    error_log("API Response: " . var_export($result, true));
+    
     if (se($result, "status", 400, false) == 200 && isset($result["response"])) {
         $result = json_decode($result["response"], true);
     } else {
@@ -41,33 +32,21 @@ function fetch_quote($symbol)
     }
     $transformedResult = [];
     // transform data to match our DB structure
-    if (isset($result["Global Quote"])) {
-        
-        $quote = $result["Global Quote"];
-        foreach ($quote as $k => $v) {
-            // remove the numbers from the keys and fix spaces to underscores
-            // "01. symbol"
-            //["01.", "symbol"]
-            $k = str_replace(" ", "_", /*symbol*/ explode(" ", $k, 2)[1]);
-
-            $v = str_replace("%", "", $v);
-            if (is_numeric($v)) {
-                if(strpos($v, ".") !== false) {
-                    $v = floatval($v);
-                } else {
-                    $v = intval($v);
-                }
-            }
-            // assign updated/mapped key/values
-            $transformedResult[$k] = $v;
-        }
-        // removed used data
-        unset($transformedResult["previous_close"]);
-        unset($transformedResult["change"]);
+    if (isset($result["tournaments"])) {
+       foreach ($result["tournaments"] as $t) {
+       $transformedResult[] = [
+       "tourn_id" =>  $t["tourn_id"] ?? null,
+       "name"     =>  $t["name"] ?? null,
+       "start_date" =>  $t["start_date"] ?? null,
+       "end_date"   =>  $t["end_date"] ?? null,
+       "is_api"     => 1
+    ];
+}
     }
     return $transformedResult;
 }
-function search_companies($search){
+function search_companies($search)
+{
     $data = ["function" => "SYMBOL_SEARCH", "keywords" => $search, "datatype" => "json"];
     $endpoint = "https://alpha-vantage.p.rapidapi.com/query";
     $isRapidAPI = true;
@@ -129,13 +108,13 @@ function search_companies($search){
         $result = [];
     }
     // transform data
-    if(isset($result["bestMatches"])){
+    if (isset($result["bestMatches"])) {
         $result = $result["bestMatches"];
         $transformedResult = [];
-        foreach($result as $r){
-            
+        foreach ($result as $r) {
+
             // fixed keys
-            foreach($r as $k=>$v){
+            foreach ($r as $k => $v) {
                 // "1. symbol"
                 // ["1.", "symbol"]
                 // "symbol"
@@ -143,20 +122,35 @@ function search_companies($search){
                 $r[$nk] = $v;
                 unset($r[$k]);
             }
-            if(strlen($r["symbol"]) > 6){
+            if (strlen($r["symbol"]) > 6) {
                 continue;
             }
             // map/extract desired information
             $data = [
-                "symbol"=>$r["symbol"],
-                "name" =>$r["name"],
-                "type"=>$r["type"],
-                "region"=>$r["region"],
-                "currency"=>$r["currency"],
-                "is_api"=>1
+                "symbol" => $r["symbol"],
+                "name" => $r["name"],
+                "type" => $r["type"],
+                "region" => $r["region"],
+                "currency" => $r["currency"],
+                "is_api" => 1
             ];
             array_push($transformedResult, $data);
         }
     }
     return $transformedResult;
+}
+
+function uppercaseSymbolCurrency($data)
+{
+    if (!is_array($data)) {
+        throw new InvalidArgumentException('$data must be an array');
+    }
+    foreach ($data as $i => $obj) {
+        foreach ($obj as $k => $v) {
+            if (in_array($k, ["symbol", "currency"])) {
+                $data[$i][$k] = strtoupper($v);
+            }
+        }
+    }
+    return $data;
 }

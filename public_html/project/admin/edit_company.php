@@ -13,7 +13,7 @@ $id = se($_GET, "id", -1, false);
 //TODO handle stock fetch
 if (isset($_POST["symbol"])) {
     foreach ($_POST as $k => $v) {
-        if (!in_array($k, ["symbol", "name", "type","region","currency"])) {
+        if (!in_array($k, ["symbol", "name", "type", "region", "currency"])) {
             unset($_POST[$k]);
         }
         $company = $_POST;
@@ -21,38 +21,22 @@ if (isset($_POST["symbol"])) {
     }
     // Ideally only the table name should need to change for most queries
     //update data
-    $db = getDB();
-    $query = "UPDATE `IT202-M25-Companies` SET ";
+    $company["id"] = $id; // add id to the company array for the update
 
-    $params = [];
-    //per record
-    foreach ($company as $k => $v) {
-
-        if ($params) {
-            $query .= ",";
-        }
-        //be sure $k is trusted as this is a source of sql 
-        // can do any data transformation here
-        // Note: backticks are wrapped around the key incase your column
-        //names use reserved sql keywords
-        $query .= "`$k`=:$k";
-        $params[":$k"] = $v;
-        if(in_array($k, ["symbol", "currency"])) {
-            $params[":$k"] = strtoupper($v); // ensure symbol is uppercase
-        }
-    }
-
-    $query .= " WHERE id = :id";
-    $params[":id"] = $id;
-    error_log("Query: " . $query);
-    error_log("Params: " . var_export($params, true));
     try {
-        $stmt = $db->prepare($query);
-        $stmt->execute($params);
-        flash("Updated record ", "success");
+        $company = uppercaseSymbolCurrency([$company])[0];
+        $r = update("IT202-M25-Companies", $company);
+        if ($r["rowCount"]) {
+            flash("Updated " . $r["rowCount"] . " record(s)", "success");
+        } else {
+            flash("Error updating record (this can occur if no properties changed)", "warning");
+        }
     } catch (PDOException $e) {
         error_log("Something broke with the query" . var_export($e, true));
         flash("An error occurred", "danger");
+    } catch (Exception $e) {
+        error_log("Something broke with the query" . var_export($e, true));
+        flash("An error occurred: " . $e->getMessage(), "danger");
     }
 }
 
@@ -81,28 +65,28 @@ if ($id > -1) {
 <div class="container-fluid">
     <h3>Edit Company</h3>
     <form method="POST">
-            <div class="mb-3">
-                <label for="symbol">Company Symbol</label>
-                <input type="text" name="symbol" id="symbol" placeholder="Company Symbol" required value="<?php se($company, "symbol"); ?>">
-            </div>
-            <div class="mb-3">
-                <label for="name">Company Name</label>
-                <input type="text" name="name" id="name" placeholder="Company Name" required value="<?php se($company, "name"); ?>">
-            </div>
-            <div class="mb-3">
-                <label for="type">Company Type</label>
-                <input type="text" name="type" id="type" placeholder="Company Type" required value="<?php se($company, "type"); ?>">
-            </div>
-            <div class="mb-3">
-                <label for="region">Company Region</label>
-                <input type="text" name="region" id="region" placeholder="Company Region" required value="<?php se($company, "region"); ?>">
-            </div>
-            <div class="mb-3">
-                <label for="currency">Company Currency</label>
-                <input type="text" maxlength="4" name="currency" id="currency" placeholder="Company Currency" required value="<?php se($company, "currency"); ?>">
-            </div>
-            <input type="submit" value="Update" class="btn btn-primary">
-        </form>
+        <div class="mb-3">
+            <label for="symbol">Company Symbol</label>
+            <input type="text" name="symbol" id="symbol" placeholder="Company Symbol" required value="<?php se($company, "symbol"); ?>">
+        </div>
+        <div class="mb-3">
+            <label for="name">Company Name</label>
+            <input type="text" name="name" id="name" placeholder="Company Name" required value="<?php se($company, "name"); ?>">
+        </div>
+        <div class="mb-3">
+            <label for="type">Company Type</label>
+            <input type="text" name="type" id="type" placeholder="Company Type" required value="<?php se($company, "type"); ?>">
+        </div>
+        <div class="mb-3">
+            <label for="region">Company Region</label>
+            <input type="text" name="region" id="region" placeholder="Company Region" required value="<?php se($company, "region"); ?>">
+        </div>
+        <div class="mb-3">
+            <label for="currency">Company Currency</label>
+            <input type="text" maxlength="4" name="currency" id="currency" placeholder="Company Currency" required value="<?php se($company, "currency"); ?>">
+        </div>
+        <input type="submit" value="Update" class="btn btn-primary">
+    </form>
 
 </div>
 
