@@ -1,7 +1,8 @@
 <?php
-
-$ini = @parse_ini_file(".env");
-
+$env = [];
+if (file_exists(".env")) {
+$ini = parse_ini_file(".env");
+}
 if($ini && isset($ini["DB_URL"])){
     //load local .env file
     $url = $ini["DB_URL"];
