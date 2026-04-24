@@ -1,15 +1,11 @@
 <?php
-$ini = [];
-$envPath = __DIR__ . "/../.env";
 
-if (file_exists($envPath)) {
-  $ini = parse_ini_file("$envPath");
-}
+$ini = @parse_ini_file(".env");
+
 if($ini && isset($ini["DB_URL"])){
     //load local .env file
     $url = $ini["DB_URL"];
     $db_url = parse_url($url);
-  
 }
 else{
     //load from heroku env variables
