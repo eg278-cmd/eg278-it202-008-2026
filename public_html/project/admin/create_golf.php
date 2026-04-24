@@ -1,5 +1,6 @@
 <?php
 //note we need to go up 1 more directory
+require(__DIR__ . "/../../../lib/functions.php");
 require(__DIR__ . "/../../../lib/user_helpers.php");
 
 if (!has_role("Admin")) {
