@@ -48,7 +48,7 @@ if (isset($_POST["action"])) {
 
         error_log("Transformed companies " . var_export($companies, true));
         try {
-            $r = insert("IT202-M25-Companies", $companies,["debug"=>true,"update_duplicate"=>true]);
+            $r = insert("IT202-E25-Companies", $companies,["debug"=>true,"update_duplicate"=>true]);
             if ($r["lastInsertId"] || $r["rowCount"] > 0) {
                 flash("Inserted record " . $r["lastInsertId"], "success");
             } else {

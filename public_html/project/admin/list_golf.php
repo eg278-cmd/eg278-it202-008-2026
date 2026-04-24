@@ -9,7 +9,10 @@ if (!has_role("Admin")) {
 
 
 
-$query = "SELECT id, symbol, open, low, high, price, change_percent, latest_trading_day, volume, is_api FROM `IT202-M25-Stocks` ORDER BY created DESC LIMIT 25";
+$query = "SELECT id, tourn_id, name, start_date, end_date, is_api volume, 
+          FROM `IT202-E25-Golf` 
+          ORDER BY created
+           DESC LIMIT 25";
 $db = getDB();
 $stmt = $db->prepare($query);
 $results = [];
@@ -25,7 +28,7 @@ try {
 }
 ?>
 <div class="container-fluid">
-    <h3>List Stocks</h3>
+    <h3>List Golf Tournaments</h3>
     <?php if (count($results) == 0) : ?>
     <p>No results to show</p>
 <?php else : ?>
@@ -46,7 +49,7 @@ try {
 
 
                 <td>
-                    <a href="<?php echo get_url("admin/edit_stock.php");?>?id=<?php se($record, "id"); ?>">Edit</a>
+                    <a href="<?php echo get_url("admin/edit_golf.php");?>?id=<?php se($record, "id"); ?>">Edit</a>
                 </td>
             </tr>
         <?php endforeach; ?>

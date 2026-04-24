@@ -5,7 +5,7 @@
  * Here, each endpoint needed will be exposes as a function.
  * The function will take the parameters needed for the API call and return the result.
  * The function will also handle the API key and endpoint.
- * Requires the api_helper.php file and load_api_keys.php file.
+ * Requires the api_helpers.php file and load_api_keys.php file.
  */
 
 /**
@@ -35,10 +35,10 @@ function fetch_golf_schedule($orgId = 1, $year = 2024)
     if (isset($result["tournaments"])) {
        foreach ($result["tournaments"] as $t) {
        $transformedResult[] = [
-       "tourn_id" =>  $t["tourn_id"] ?? null,
-       "name"     =>  $t["name"] ?? null,
-       "start_date" =>  $t["start_date"] ?? null,
-       "end_date"   =>  $t["end_date"] ?? null,
+       "tourn_id" =>  $t["tournament_id"],
+       "name"     =>  $t["tournament_name"],
+       "start_date" =>  substr($t["startDate"], 0, 10),
+       "end_date"   =>  substr($t["endDate"], 0, 10,),
        "is_api"     => 1
     ];
 }
@@ -51,7 +51,7 @@ function search_companies($search)
     $endpoint = "https://alpha-vantage.p.rapidapi.com/query";
     $isRapidAPI = true;
     $rapidAPIHost = "alpha-vantage.p.rapidapi.com";
-    $result = get($endpoint, "STOCK_API_KEY", $data, $isRapidAPI, $rapidAPIHost);
+    $result = get($endpoint, "GOLF_API_KEY", $data, $isRapidAPI, $rapidAPIHost);
     //example of cached data to save the quotas, don't forget to comment out the get() if using the cached data for testing
     /* $result = ["status" => 200, "response" => {
         "bestMatches": [
@@ -101,14 +101,14 @@ function search_companies($search)
             }
         ]
     }'];*/
-    error_log("API Response: " . var_export($result, true));
+    error_log("GOLF API Response: " . var_export($result, true));
     if (se($result, "status", 400, false) == 200 && isset($result["response"])) {
         $result = json_decode($result["response"], true);
     } else {
         $result = [];
     }
     // transform data
-    if (isset($result["bestMatches"])) {
+    if(isset($result["bestMatches"])){
         $result = $result["bestMatches"];
         $transformedResult = [];
         foreach ($result as $r) {
