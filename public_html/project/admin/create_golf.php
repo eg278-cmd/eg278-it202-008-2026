@@ -13,7 +13,7 @@ if (!has_role("Admin")) {
 //TODO handle stock fetch
 if (isset($_POST["action"])) {
     $action = $_POST["action"];
-    $tourn_id =  strtoupper(se($_POST, "tourn_id", "", false));
+    $tourn_id =  strtoupper($_POST["tourn_id"] ?? "");
     $golf = [];
    
         if ($action === "fetch") {
