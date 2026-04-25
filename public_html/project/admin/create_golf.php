@@ -38,7 +38,7 @@ if (isset($_POST["action"])) {
                 $end_date   = $end_ts ? date("Y-m-d", $end_ts / 1000) : "";
                 
                 $golf = [
-                    "tourn_id" => $row["tourn_id"] ?? "",
+                    "tourn_id" => $row["tournId"] ?? "",
                     "name" => $row["name"] ?? "",
                     "start_date" => $start_date,
                     "end_date" => $end_date,
