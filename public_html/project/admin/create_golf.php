@@ -137,7 +137,7 @@ if (isset($_POST["action"])) {
         if (target) {
             let eles = document.getElementsByClassName("tab-target");
             for (let ele of eles) {
-                ele.style.display = (ele.id === tab) ? "none" : "block";
+                ele.style.display = (ele.id === tab) ? "block" : "none";
             }
         }
     }
