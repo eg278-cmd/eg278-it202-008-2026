@@ -22,19 +22,21 @@ if (isset($_POST["action"])) {
 
             error_log("Data from Golf API" . var_export($result, true));
             if ($result) {
-                $row = $result[0];
+
+                $row = $decoded["schedule"][0];
 
                 error_log("GOLF DATA: " . var_export($row, true));
                 
                 $golf = [
-                    "tourn_id" => $row["tourn_id"],
-                    "name" => $row["name"],
-                    "start_date" => $row["start_date"],
-                    "end_date" => $row["end_date"],
+                    "tourn_id" => $row["tourn_id"] ?? "",
+                    "name" => $row["name"] ?? "",
+                    "start_date" => $row["date"]["start"][$date]["$numberLong"] ?? "",
+                    "end_date" => $row["date"]["end"]["$date"]["$numberLong"] ?? "",
                     "is_api" => 1
                 ];
             }
         }
+    
          else if ($action === "create") {
             foreach ($_POST as $k => $v) {
                 // remove keys that aren't part of your data
@@ -84,6 +86,7 @@ if (isset($_POST["action"])) {
         flash("An error occurred", "danger");
     }
 }
+
 
 //TODO handle manual create stock
 ?>
