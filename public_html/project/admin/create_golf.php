@@ -23,6 +23,9 @@ if (isset($_POST["action"])) {
             error_log("Data from Golf API" . var_export($result, true));
             if ($result) {
                 $row = $result[1];
+
+                error_log("GOLF DATA: " . var_export($row, true));
+                
                 $golf = [
                     "tourn_id" => $row["tourn_id"],
                     "name" => $row["name"],
