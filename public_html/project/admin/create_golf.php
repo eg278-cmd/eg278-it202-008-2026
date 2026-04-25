@@ -61,6 +61,8 @@ if (isset($_POST["action"])) {
     }
     $columns[] = "`tourn_id`";
     $params[":tourn_id"] = $tourn_id;
+    $columns[] = "`name`";
+    $params[":name"] = $golf["tournament_name"] ?? "";
     $query .= "(" . join(",", $columns) . ")";
     $query .= "VALUES (" . join(",", array_keys($params)) . ")";
     error_log("Query: " . $query);
