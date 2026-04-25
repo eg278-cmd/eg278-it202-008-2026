@@ -18,7 +18,7 @@ if (isset($_POST["action"])) {
    
         if ($action === "fetch") {
             // Fetch API Golf Tournaments
-            /** @var array $result */
+            
             $result = fetch_golf_schedule(1, 2024);
 
             error_log("Data from Golf API: " . var_export($result, true));
