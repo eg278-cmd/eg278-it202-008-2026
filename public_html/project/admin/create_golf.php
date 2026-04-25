@@ -59,6 +59,8 @@ if (isset($_POST["action"])) {
         array_push($columns, "`$k`");
         $params[":$k"] = $v;
     }
+    $columns[] = "`tourn_id`";
+    $params[":tourn_id"] = $tourn_id;
     $query .= "(" . join(",", $columns) . ")";
     $query .= "VALUES (" . join(",", array_keys($params)) . ")";
     error_log("Query: " . $query);
