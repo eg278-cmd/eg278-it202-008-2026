@@ -4,7 +4,7 @@ require(__DIR__ . "/../../../partials/nav.php");
 
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
-   // die(header("Location: " . get_url("landing.php")));
+    die(header("Location: " . get_url("landing.php")));
 }
 ?>
 
@@ -13,7 +13,7 @@ if (!has_role("Admin")) {
 //TODO handle stock fetch
 if (isset($_POST["action"])) {
     $action = $_POST["action"];
-    $tourn_id =  strtoupper($_POST["tourn_id"] ?? "");
+    $tourn_id = $_POST["tourn_id"] ?? "";
     $golf = [];
    
         if ($action === "fetch") {
