@@ -22,16 +22,27 @@ if (isset($_POST["action"])) {
 
             error_log("Data from Golf API" . var_export($result, true));
             if ($result) {
+                // decode the JSON string inside "response"
+                $decoded = json_decode($row["response"], true);
 
+                // get the first tournament from the schedule array
                 $row = $decoded["schedule"][0];
 
+                // log the real tournament data
                 error_log("GOLF DATA: " . var_export($row, true));
+
+                // convert timestamps to YYYY-MM-DD
+                $start_ts = $row["date"]["start"]["$date"]["$numberLong"] ?? null;
+                $end_ts   = $row["date"]["end"]["$date"]["$numberLong"] ?? null;
+
+                $start_date = $start_ts ? date("Y-m-d", $start_ts / 1000) : "";
+                $end_date   = $end_ts ? date("Y-m-d", $end_ts / 1000) : "";
                 
                 $golf = [
                     "tourn_id" => $row["tourn_id"] ?? "",
                     "name" => $row["name"] ?? "",
-                    "start_date" => $row["date"]["start"][$date]["$numberLong"] ?? "",
-                    "end_date" => $row["date"]["end"]["$date"]["$numberLong"] ?? "",
+                    "start_date" => $start_date,
+                    "end_date" => $end_date,
                     "is_api" => 1
                 ];
             }
