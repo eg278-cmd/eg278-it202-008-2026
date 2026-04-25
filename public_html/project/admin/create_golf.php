@@ -76,13 +76,13 @@ if (isset($_POST["action"])) {
         $params[":$k"] = $v;
     }
     $columns[] = "`tourn_id`";
-    $params[":tourn_id"] = $tourn_id;
+    $params[":tourn_id"] = $golf["tourn_id"] ?? $tourn_id;
     $columns[] = "`name`";
-    $params[":name"] = $golf["tournament_name"] ?? "";
+    $params[":name"] = $golf["name"] ?? "";
     $columns[] = "`start_date`";
-    $params[":start_date"] = $golf["start_date"] ?? $golf["startDate"] ?? "";
+    $params[":start_date"] = $golf["start_date"] ?? "";
     $columns[] = "`end_date`";
-    $params[":end_date"] = $golf["end_date"] ?? $golf["endDate"] ?? "";
+    $params[":end_date"] = $golf["end_date"] ?? "";
     $query .= "(" . join(",", $columns) . ")";
     $query .= "VALUES (" . join(",", array_keys($params)) . ")";
     error_log("Query: " . $query);
