@@ -18,14 +18,13 @@ if (isset($_POST["action"])) {
    
         if ($action === "fetch") {
             // Fetch API Golf Tournaments
+            /** @var array $result */
             $result = fetch_golf_schedule(1, 2024);
 
-            error_log("Data from Golf API" . var_export($result, true));
+            error_log("Data from Golf API: " . var_export($result, true));
             if ($result) {
                 // decode the JSON string inside "response"
-                $decoded = json_decode($row["response"], true);
-
-                // get the first tournament from the schedule array
+                $decoded = json_decode($result["response"], true);
                 $row = $decoded["schedule"][0];
 
                 // log the real tournament data
