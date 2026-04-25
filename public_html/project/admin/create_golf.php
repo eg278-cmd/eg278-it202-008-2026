@@ -22,7 +22,7 @@ if (isset($_POST["action"])) {
 
             error_log("Data from Golf API" . var_export($result, true));
             if ($result) {
-                $row = $result[1];
+                $row = $result[0];
 
                 error_log("GOLF DATA: " . var_export($row, true));
                 
