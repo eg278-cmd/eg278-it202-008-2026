@@ -22,7 +22,7 @@ if (isset($_POST["action"])) {
             error_log("GOLF API RESPONSE: " . var_export($result, true));
             if ($result) {
                 // Decode JSON inside "response"
-                $decoded = json_decode($result["response"], true);
+                $decoded = json_decode($row["response"], true);
 
                 // First tournament in schedule
                 $row = $decoded["schedule"][0];
@@ -65,11 +65,11 @@ if (isset($_POST["action"])) {
     //insert data - Below should only really need the table name changes
     // the query building should work for all regular inserts
     $db = getDB();
-    $query = "INSERT INTO `IT202-E25-Stocks` ";
+    $query = "INSERT INTO `IT202-E25-Golf` ";
     $columns = [];
     $params = [];
     //per record
-    foreach ($quote as $k => $v) {
+    foreach ($golf as $k => $v) {
         array_push($columns, "`$k`");
         $params[":$k"] = $v;
     }
