@@ -1,10 +1,8 @@
 <?php
 
 /**
- * Check if the user is logged in and optionally redirect to $destination.
- * @param bool $redirect Whether to redirect if not logged in.
- * @param string $destination The destination to redirect to if not logged in (relative to BASE_PATH or absolute).
- * @return bool True if the user is logged in, false otherwise.
+ * Passing $redirect as true will auto redirect a logged out user to the $destination.
+ * The destination defaults to login.php
  */
 function is_logged_in($redirect = false, $destination = "login.php")
 {
@@ -12,20 +10,8 @@ function is_logged_in($redirect = false, $destination = "login.php")
     if ($redirect && !$isLoggedIn) {
         //if this triggers, the calling script won't receive a reply since die()/exit() terminates it
         flash("You must be logged in to view this page", "warning");
-        $path = $destination;
-        // handle relative paths
-        if (!str_starts_with($path, "/")) {
-            global $BASE_PATH; // pull from global scope of functions.php
-            // ensure BASE_PATH ends with a slash so the url doesn't get malformed
-            if (!str_ends_with($BASE_PATH, "/")) {
-                $BASE_PATH .= "/";
-            }
-            $path = $BASE_PATH . $path; // prepend the base path
-        } // the else part is for absolute paths
-
-        (header("Location: $path"));
-        exit;
-    }   
+        die(header("Location: $destination"));
+    }
     return $isLoggedIn;
 }
 function has_role($role)
@@ -58,5 +44,5 @@ function get_user_id()
     if (is_logged_in()) { //we need to check for login first because "user" key may not exist
         return se($_SESSION["user"], "id", false, false);
     }
-    return -1;
+    return false;
 }
