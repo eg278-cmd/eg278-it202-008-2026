@@ -3,7 +3,8 @@ require(__DIR__ . "/../../../partials/nav.php");
 
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
-    //die(header("Location: " . get_url("landing.php")));
+    header("Location: " . get_url("landing.php"));
+    exit;
 }
 ?>
 
@@ -35,7 +36,6 @@ if (isset($_POST["action"])) {
                 "is_api" => 1
             ];
         }
-
     } else if ($action === "create") {
 
         // Clean POST keys to match DB columns
@@ -139,12 +139,12 @@ if (isset($_POST["action"])) {
 </div>
 
 <script>
-function switchTab(tab) {
-    let targets = document.getElementsByClassName("tab-target");
-    for (let t of targets) {
-        t.style.display = (t.id === tab) ? "block" : "none";
+    function switchTab(tab) {
+        let targets = document.getElementsByClassName("tab-target");
+        for (let t of targets) {
+            t.style.display = (t.id === tab) ? "block" : "none";
+        }
     }
-}
 </script>
 
 <?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
