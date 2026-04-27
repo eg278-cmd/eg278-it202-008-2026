@@ -9,7 +9,7 @@ require_once(__DIR__ . "/../../partials/nav.php");
     </div>
     <div>
         <label for="pw">Password</label>
-        <input type="password" id="pw" name="password" required minlength="8" />
+        <input type="password" id="pw" name="password" />
     </div>
     <input type="submit" value="Login" />
 </form>
@@ -19,6 +19,8 @@ require_once(__DIR__ . "/../../partials/nav.php");
         //ensure it returns false for an error and true for success
         let email = form.email.value.trim();
         let password = form.password.value.trim();
+       
+
 
         // Email or username can't be empty
         if (email.length === 0) {
@@ -65,7 +67,7 @@ if (isset($_POST["email"], $_POST["password"])) {
         }
     }
 
-
+     
     if (empty($password)) {
         flash("Password is required.", "danger");
         $hasError = true;
@@ -109,7 +111,7 @@ if (isset($_POST["email"], $_POST["password"])) {
                         //save roles or empty array
                         $_SESSION["user"]["roles"] = isset($roles) ? $roles : [];
 
-                        die(header("Location: landing.php"));
+                       // die(header("Location: landing.php"));
                     } else {
                         //echo "Invalid password<br>";
                         $ambigify = true; // ambiguous login attempt
