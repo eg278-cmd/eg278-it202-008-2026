@@ -22,10 +22,10 @@ function _sendRequest($url, $key, $data = [], $method = 'GET', $isRapidAPI = tru
         throw new Exception("Missing or empty API KEY");
     }
     $headers = [];
-    if ($isRapidAPI) {
-        $headers = [
-            "X-RapidAPI-Host" => $rapidAPIHost,
-            "X-RapidAPI-Key" => $API_KEYS[$key],
+   if ($isRapidAPI) {
+    $headers = [
+        "X-RapidAPI-Host: $rapidAPIHost",
+        "X-RapidAPI-Key: " . $API_KEYS[$key]
         ];
     } else {
         $headers = [
