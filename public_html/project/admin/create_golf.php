@@ -1,94 +1,91 @@
 <?php
-//note we need to go up 1 more directory
 require(__DIR__ . "/../../../partials/nav.php");
 
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
-    (header("Location: " . get_url("landing.php")));
+    die(header("Location: " . get_url("landing.php")));
 }
 ?>
 
 <?php
 
-//TODO handle stock fetch
+// Handle golf fetch or manual create
 if (isset($_POST["action"])) {
     $action = $_POST["action"];
-    $tourn_id = (se($_POST, "tourn_id", "", false));
-    $golf = [];
-    if ($tourn_id) {
-        if ($action === "fetch") {
-            $result = fetch_golf_schedule(1, 2024);
+    $quote = [];
 
-            error_log("GOLF API RESPONSE: " . var_export($result, true));
-            if ($result) {
-                // Decode JSON inside "response"
-                $decoded = json_decode($row["response"], true);
+    if ($action === "fetch") {
 
-                // First tournament in schedule
-                $row = $decoded["schedule"][0];
+        // Fetch from API
+        $result = fetch_golf_schedule();
 
-                error_log("GOLF DATA: " . var_export($row, true));
+        error_log("Data from API: " . var_export($result, true));
 
-                // Extract timestamps (correct keys)
-                $start_ts = $row["date"]["start"]["$date"]["$numberLong"] ?? null;
-                $end_ts   = $row["date"]["end"]["$date"]["$numberLong"] ?? null;
+        if ($result && isset($result["results"][0])) {
+            $g = $result["results"][0];
 
-                // Convert to YYYY-MM-DD
-                $start_date = $start_ts ? date("Y-m-d", $start_ts / 1000) : "";
-                $end_date   = $end_ts ? date("Y-m-d", $end_ts / 1000) : "";
-
-                // Build golf array
-                $golf = [
-                    "tourn_id" => $row["tournId"] ?? "",
-                    "name" => $row["name"] ?? "",
-                    "start_date" => $start_date,
-                    "end_date" => $end_date,
-                    "is_api" => 1
-                ];
-            }
-        } else if ($action === "create") {
-            foreach ($_POST as $k => $v) {
-                // remove keys that aren't part of your data
-                // this is both for security and for our dynamic DB logic to work correctly
-                // the keys must match the column names of your table
-                if (!in_array($k, ["tourn_id", "name", "start_date", "end_date"])) {
-                    unset($_POST[$k]);
-                }
-            }
-            $golf = $_POST;
-            $golf["is_api"] = 0;
-            error_log("Cleaned up POST: " . var_export($quote, true));
+            // TRANSFORMATION STEP (Milestone requirement)
+            $quote = [
+                "tournament_id" => $g["tournament_id"],
+                "tournament_name" => $g["tournament_name"],
+                "course" => $g["course"],
+                "location" => $g["location"],
+                "start_date" => $g["start_date"],
+                "end_date" => $g["end_date"],
+                "is_api" => 1
+            ];
         }
-    } else {
-        flash("You must provide a tournament ID", "warning");
+
+    } else if ($action === "create") {
+
+        // Clean POST keys to match DB columns
+        foreach ($_POST as $k => $v) {
+            if (!in_array($k, [
+                "tournament_id",
+                "tournament_name",
+                "course",
+                "location",
+                "start_date",
+                "end_date"
+            ])) {
+                unset($_POST[$k]);
+            }
+        }
+
+        $quote = $_POST;
+        $quote["is_api"] = 0;
+
+        error_log("Cleaned POST: " . var_export($quote, true));
     }
-    //insert data - Below should only really need the table name changes
-    // the query building should work for all regular inserts
+
+    // Insert into DB
     $db = getDB();
     $query = "INSERT INTO `IT202-E25-Golf` ";
     $columns = [];
     $params = [];
-    //per record
-    foreach ($golf as $k => $v) {
-        array_push($columns, "`$k`");
+
+    foreach ($quote as $k => $v) {
+        $columns[] = "`$k`";
         $params[":$k"] = $v;
     }
+
     $query .= "(" . join(",", $columns) . ")";
-    $query .= "VALUES (" . join(",", array_keys($params)) . ")";
+    $query .= " VALUES (" . join(",", array_keys($params)) . ")";
+
     error_log("Query: " . $query);
     error_log("Params: " . var_export($params, true));
+
     try {
         $stmt = $db->prepare($query);
         $stmt->execute($params);
         flash("Inserted record " . $db->lastInsertId(), "success");
     } catch (PDOException $e) {
-        error_log("Something broke with the query" . var_export($e, true));
+        error_log("DB Error: " . var_export($e, true));
         flash("An error occurred", "danger");
     }
 }
-
-//TODO handle manual create stock
 ?>
+
 <div class="container-fluid">
     <h3>Create or Fetch Golf Tournament</h3>
     <ul class="nav nav-tabs">
@@ -99,53 +96,55 @@ if (isset($_POST["action"])) {
             <a class="nav-link bg-success" href="#" onclick="switchTab('create')">Create</a>
         </li>
     </ul>
+
     <div id="fetch" class="tab-target">
         <form method="POST">
-            <div>
-                <label for="tourn_id">Tournament ID</label>
-                <input type="text" name="tourn_id" id="tourn_id" placeholder="Tournament ID" required>
-            </div>
+            <p>Fetches the next tournament from the API</p>
             <input type="hidden" name="action" value="fetch">
-            <input type="submit" value="Fetch API Tournament" class="btn btn-primary">
+            <input type="submit" value="Fetch" class="btn btn-primary">
         </form>
     </div>
-    <div id="create" style="display: none;" class="tab-target">
+
+    <div id="create" style="display:none;" class="tab-target">
         <form method="POST">
             <div class="mb-3">
-                <label for="tourn_id">Tournament ID</label>
-                <input type="text" name="tourn_id" id="tourn_id" required>
+                <label>Tournament ID</label>
+                <input type="number" name="tournament_id" required>
             </div>
             <div class="mb-3">
-                <label for="name">Tournament Name</label>
-                <input type="text" name="name" id="name" required>
+                <label>Tournament Name</label>
+                <input type="text" name="tournament_name" required>
             </div>
             <div class="mb-3">
-                <label for="start_date">Start Date</label>
-                <input type="date" name="start_date" id="start_date" required>
+                <label>Course</label>
+                <input type="text" name="course" required>
             </div>
             <div class="mb-3">
-                <label for="end_date">End Date</label>
-                <input type="date" name="end_date" id="end_date" required>
+                <label>Location</label>
+                <input type="text" name="location" required>
             </div>
-           
+            <div class="mb-3">
+                <label>Start Date</label>
+                <input type="date" name="start_date" required>
+            </div>
+            <div class="mb-3">
+                <label>End Date</label>
+                <input type="date" name="end_date" required>
+            </div>
+
             <input type="hidden" name="action" value="create">
-            <input type="submit" value="Create Tournament" class="btn btn-primary">
+            <input type="submit" value="Create" class="btn btn-primary">
         </form>
     </div>
 </div>
+
 <script>
-    function switchTab(tab) {
-        let target = document.getElementById(tab);
-        if (target) {
-            let eles = document.getElementsByClassName("tab-target");
-            for (let ele of eles) {
-                ele.style.display = (ele.id === tab) ? "block" : "none";
-            }
-        }
+function switchTab(tab) {
+    let targets = document.getElementsByClassName("tab-target");
+    for (let t of targets) {
+        t.style.display = (t.id === tab) ? "block" : "none";
     }
+}
 </script>
 
-<?php
-//note we need to go up 1 more directory
-require_once(__DIR__ . "/../../../partials/flash.php");
-?>
+<?php require_once(__DIR__ . "/../../../partials/flash.php"); ?>
