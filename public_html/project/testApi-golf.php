@@ -23,6 +23,9 @@ if (isset($_GET["orgId"]) && isset($_GET["year"])) {
     // Decode JSON if successful
     if (se($result, "status", 400, false) == 200 && isset($result["response"])) {
         $result = json_decode($result["response"], true);
+        echo "<pre>";
+        var_export($result);
+        echo "</pre>";
     } else {
         $result = [];
     }
