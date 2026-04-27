@@ -1,11 +1,12 @@
 <?php
-require(__DIR__ . "/../../../partials/nav.php");
-
 if (!has_role("Admin")) {
-    flash("You don't have permission to view this page", "warning");
+    flash("You don't have permission", "warning");
     header("Location: " . get_url("landing.php"));
     exit;
 }
+
+require(__DIR__ . "/../../../partials/nav.php");
+
 ?>
 
 <?php
