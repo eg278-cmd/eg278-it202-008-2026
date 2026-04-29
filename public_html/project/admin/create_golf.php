@@ -20,7 +20,7 @@ if (isset($_POST["action"])) {
         error_log("Data from API: " . var_export($result, true));
 
         if ($result && isset($result["results"][0])) {
-            $g = $result["results"][0];
+            $g = $result["schedule"][0];
 
             // Extract timestamps
             $start_ts = $g["date"]["start"]["\$date"]["\$numberLong"];
