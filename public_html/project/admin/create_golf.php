@@ -1,4 +1,7 @@
 <?php
+
+require(__DIR__ . "/../../../partials/nav.php");
+
 // Admin check FIRST (no output before header)
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
