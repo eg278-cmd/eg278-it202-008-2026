@@ -45,7 +45,7 @@ if (isset($_GET["orgId"]) && isset($_GET["year"])) {
     <form>
         <div>
             <label>OrgId</label>
-            <input name="orgId" value="1" />
+            <input name="orgId" value="2" />
 
             <label>Year</label>
             <input name="year" value="2024" />
