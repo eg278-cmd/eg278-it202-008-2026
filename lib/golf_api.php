@@ -11,40 +11,42 @@
 /**
  * Fetches the golf tournament schedule for a given org and year.
  */
-function fetch_golf_schedule($orgId = 1, $year = 2024)
+function fetch_golf_schedule()
 {
-    $data = [
-        "orgId" => $orgId, 
-        "year"  => $year
-    ];
+    //  RapidAPI endpoint
     $endpoint = "https://live-golf-data.p.rapidapi.com/schedule";
-    $isRapidAPI = true;
-    $rapidAPIHost = "live-golf-data.p.rapidapi.com";
+    $host = "live-golf-data.p.rapidapi.com";
 
-    $result = get($endpoint, "GOLF_API_KEY", $data, $isRapidAPI, $rapidAPIHost);
-    error_log("GOLF API RESPONSE: " . var_export($result, true));
-    //example of cached data to save the quotas, don't forget to comment out the get() if using the cached data for testing
-    
+    // This API only needs the year
+    $params = ["year" => 2024];
+
+    // Make the API request
+    $result = get($endpoint, "GOLF_API_KEY", $params, true, $host);
+
+    // If API call succeeded and returned JSON
     if (se($result, "status", 400, false) == 200 && isset($result["response"])) {
-        $result = json_decode($result["response"], true);
-    } else {
-        $result = [];
+        return json_decode($result["response"], true);
     }
-    $transformedResult = [];
-    // transform data to match our DB structure
-    if (isset($result["tournaments"])) {
-       foreach ($result["tournaments"] as $t) {
-       $transformedResult[] = [
-       "tourn_id" =>  $t["tournament_id"],
-       "name"     =>  $t["tournament_name"],
-       "start_date" =>  substr($t["startDate"], 0, 10),
-       "end_date"   =>  substr($t["endDate"], 0, 10,),
-       "is_api"     => 1
-    ];
+
+    // If API failed or returned nothing
+    return [];
 }
+
+$transformedResult = [];
+// transform data to match our DB structure
+if (isset($result["tournaments"])) {
+    foreach ($result["tournaments"] as $t) {
+        $transformedResult[] = [
+            "tourn_id" =>  $t["tournament_id"],
+            "name"     =>  $t["tournament_name"],
+            "start_date" =>  substr($t["startDate"], 0, 10),
+            "end_date"   =>  substr($t["endDate"], 0, 10,),
+            "is_api"     => 1
+        ];
     }
-    return $transformedResult;
 }
+return $transformedResult;
+
 function search_companies($search)
 {
     $data = ["function" => "SYMBOL_SEARCH", "keywords" => $search, "datatype" => "json"];
@@ -108,7 +110,7 @@ function search_companies($search)
         $result = [];
     }
     // transform data
-    if(isset($result["bestMatches"])){
+    if (isset($result["bestMatches"])) {
         $result = $result["bestMatches"];
         $transformedResult = [];
         foreach ($result as $r) {
