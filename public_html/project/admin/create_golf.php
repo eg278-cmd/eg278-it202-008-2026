@@ -1,27 +1,21 @@
 <?php
-
 require(__DIR__ . "/../../../partials/nav.php");
 
-// Admin check FIRST (no output before header)
+// Admin check (NO redirect because nav.php already printed HTML)
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
-    header("Location: " . get_url("landing.php"));
-    
+    exit; // stop the page cleanly
 }
-
-require(__DIR__ . "/../../../partials/nav.php");
 ?>
 
 <?php
 
-// Handle golf fetch or manual create
 if (isset($_POST["action"])) {
     $action = $_POST["action"];
     $quote = [];
 
     if ($action === "fetch") {
 
-        // Fetch from API
         $result = fetch_golf_schedule();
         error_log("Data from API: " . var_export($result, true));
 
@@ -32,7 +26,7 @@ if (isset($_POST["action"])) {
             $start_ts = $g["date"]["start"]["\$date"]["\$numberLong"];
             $end_ts   = $g["date"]["end"]["\$date"]["\$numberLong"];
 
-            // TRANSFORMATION STEP (Milestone requirement)
+            // Transform into DB-ready fields
             $quote = [
                 "tourn_id"   => $g["tournId"],
                 "name"       => $g["name"],
@@ -40,52 +34,48 @@ if (isset($_POST["action"])) {
                 "end_date"   => date("Y-m-d", $end_ts / 1000),
                 "is_api"     => 1
             ];
+        } else {
+            flash("API returned no results", "warning");
         }
 
     } else if ($action === "create") {
 
-        // Clean POST keys to match DB columns
         foreach ($_POST as $k => $v) {
-            if (!in_array($k, [
-                "tourn_id",
-                "name",
-                "start_date",
-                "end_date"
-            ])) {
+            if (!in_array($k, ["tourn_id", "name", "start_date", "end_date"])) {
                 unset($_POST[$k]);
             }
         }
 
         $quote = $_POST;
         $quote["is_api"] = 0;
-
-        error_log("Cleaned POST: " . var_export($quote, true));
     }
 
     // Insert into DB
-    $db = getDB();
-    $query = "INSERT INTO `IT202-E25-Golf` ";
-    $columns = [];
-    $params = [];
+    if (!empty($quote)) {
+        $db = getDB();
+        $query = "INSERT INTO `IT202-E25-Golf` ";
+        $columns = [];
+        $params = [];
 
-    foreach ($quote as $k => $v) {
-        $columns[] = "`$k`";
-        $params[":$k"] = $v;
-    }
+        foreach ($quote as $k => $v) {
+            $columns[] = "`$k`";
+            $params[":$k"] = $v;
+        }
 
-    $query .= "(" . join(",", $columns) . ")";
-    $query .= " VALUES (" . join(",", array_keys($params)) . ")";
+        $query .= "(" . join(",", $columns) . ")";
+        $query .= " VALUES (" . join(",", array_keys($params)) . ")";
 
-    error_log("Query: " . $query);
-    error_log("Params: " . var_export($params, true));
+        error_log("Query: " . $query);
+        error_log("Params: " . var_export($params, true));
 
-    try {
-        $stmt = $db->prepare($query);
-        $stmt->execute($params);
-        flash("Inserted record " . $db->lastInsertId(), "success");
-    } catch (PDOException $e) {
-        error_log("DB Error: " . var_export($e, true));
-        flash("An error occurred", "danger");
+        try {
+            $stmt = $db->prepare($query);
+            $stmt->execute($params);
+            flash("Inserted record " . $db->lastInsertId(), "success");
+        } catch (PDOException $e) {
+            error_log("DB Error: " . var_export($e, true));
+            flash("An error occurred", "danger");
+        }
     }
 }
 ?>
