@@ -1,10 +1,12 @@
 <?php
-require(__DIR__ . "/../../../partials/nav.php");
-
+// Admin check FIRST (no output before header)
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
     header("Location: " . get_url("landing.php"));
+    exit;
 }
+
+require(__DIR__ . "/../../../partials/nav.php");
 ?>
 
 <?php
@@ -18,32 +20,32 @@ if (isset($_POST["action"])) {
 
         // Fetch from API
         $result = fetch_golf_schedule();
-
         error_log("Data from API: " . var_export($result, true));
 
         if ($result && isset($result["results"][0])) {
             $g = $result["results"][0];
 
+            // Extract timestamps
+            $start_ts = $g["date"]["start"]["\$date"]["\$numberLong"];
+            $end_ts   = $g["date"]["end"]["\$date"]["\$numberLong"];
+
             // TRANSFORMATION STEP (Milestone requirement)
             $quote = [
-                "tournament_id" => $g["tournament_id"],
-                "tournament_name" => $g["tournament_name"],
-                "course" => $g["course"],
-                "location" => $g["location"],
-                "start_date" => $g["start_date"],
-                "end_date" => $g["end_date"],
-                "is_api" => 1
+                "tourn_id"   => $g["tournId"],
+                "name"       => $g["name"],
+                "start_date" => date("Y-m-d", $start_ts / 1000),
+                "end_date"   => date("Y-m-d", $end_ts / 1000),
+                "is_api"     => 1
             ];
         }
+
     } else if ($action === "create") {
 
         // Clean POST keys to match DB columns
         foreach ($_POST as $k => $v) {
             if (!in_array($k, [
-                "tournament_id",
-                "tournament_name",
-                "course",
-                "location",
+                "tourn_id",
+                "name",
                 "start_date",
                 "end_date"
             ])) {
@@ -108,19 +110,11 @@ if (isset($_POST["action"])) {
         <form method="POST">
             <div class="mb-3">
                 <label>Tournament ID</label>
-                <input type="number" name="tournament_id" required>
+                <input type="number" name="tourn_id" required>
             </div>
             <div class="mb-3">
                 <label>Tournament Name</label>
-                <input type="text" name="tournament_name" required>
-            </div>
-            <div class="mb-3">
-                <label>Course</label>
-                <input type="text" name="course" required>
-            </div>
-            <div class="mb-3">
-                <label>Location</label>
-                <input type="text" name="location" required>
+                <input type="text" name="name" required>
             </div>
             <div class="mb-3">
                 <label>Start Date</label>

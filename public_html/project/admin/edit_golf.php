@@ -24,14 +24,14 @@ if (isset($_POST["symbol"])) {
     $row = $_POST;
     $row["id"] = $id; // add id to the stock array for the update
     try {
-        $quote = uppercaseSymbolCurrency([$quote])[0];
-        $r = update("IT202-E25-Golf", $quote);
-        if ($r["rowCount"]) {
-            flash("Updated " . $r["rowCount"] . " record(s)", "success");
-        } else {
-            flash("Error updating record (this can occur if no properties changed)", "warning");
-        }
-    } catch (PDOException $e) {
+    $r = update("IT202-E25-Golf", $quote);
+    if ($r["rowCount"]) {
+        flash("Updated " . $r["rowCount"] . " record(s)", "success");
+    } else {
+        flash("Error updating record (this can occur if no properties changed)", "warning");
+    }
+}
+ catch (PDOException $e) {
         error_log("Something broke with the query" . var_export($e, true));
         flash("An error occurred", "danger");
     }
