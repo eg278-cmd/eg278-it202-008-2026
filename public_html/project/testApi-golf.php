@@ -25,7 +25,7 @@ if (isset($_GET["orgId"]) && isset($_GET["year"])) {
     $result = json_decode($result["response"], true);
 
     // DEBUG: show the key loaded from Render
-    echo "<pre>KEY LOADED: " . getenv("GOLF_API_KEY") . "</pre>";
+    // echo "<pre>KEY LOADED: " . getenv("GOLF_API_KEY") . "</pre>";
 
     // DEBUG: show the decoded API response
     echo "<pre>";
