@@ -17,15 +17,15 @@ if (isset($_POST["action"])) {
     if ($action === "fetch") {
 
         $result = fetch_golf_schedule();
-        
-        echo "<pre>";
-        var_export($result);
-        echo "</pre>";
-        exit;
+
+        // echo "<pre>";
+        // var_export($result);
+        // echo "</pre>";
+        // exit;
 
         error_log("Data from API: " . var_export($result, true));
 
-        if ($result && isset($result["results"][0])) {
+        if ($result && isset($result["schedule"][0])) {
             $g = $result["schedule"][0];
 
             // Extract timestamps
