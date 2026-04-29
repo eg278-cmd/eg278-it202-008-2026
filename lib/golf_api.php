@@ -34,7 +34,7 @@ function fetch_golf_schedule()
 
 $transformedResult = [];
 // transform data to match our DB structure
-if (isset($result["tournaments"])) {
+if (false && isset($result["tournaments"])) {
     foreach ($result["tournaments"] as $t) {
         $transformedResult[] = [
             "tourn_id" =>  $t["tournament_id"],
