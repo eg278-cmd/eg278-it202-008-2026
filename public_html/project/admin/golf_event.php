@@ -1,5 +1,12 @@
 <?php
 require(__DIR__ . "/../../../lib/functions.php");
+require(__DIR__ . "/../../../partials/nav.php");
+
+var_dump($_SESSION);
+var_dump(is_logged_in());
+var_dump(has_role("Admin"));
+exit;
+
 
 // 1. Retrieve the ID from the URL
 $id = se($_GET, "id", -1, false);
