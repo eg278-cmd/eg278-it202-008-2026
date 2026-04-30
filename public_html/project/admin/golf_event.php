@@ -1,10 +1,10 @@
 <?php
 require(__DIR__ . "/../../../lib/functions.php");
 
-// 1. Retrieve the ID from the URL
+// 1. Retrieve ID
 $id = se($_GET, "id", -1, false);
 
-// 2. Validate the ID BEFORE nav.php
+// 2. Validate ID BEFORE nav.php
 if ($id < 1) {
     flash("Invalid tournament ID", "danger");
     header("Location: " . get_url("admin/list_golf.php"));
@@ -13,7 +13,7 @@ if ($id < 1) {
 
 $db = getDB();
 
-// 3. Load the record
+// 3. Load record
 $query = "SELECT id, tourn_id, name, start_date, end_date, is_api
           FROM `IT202-E25-Golf`
           WHERE id = :id";
@@ -28,9 +28,10 @@ if (!$record) {
     header("Location: " . get_url("admin/list_golf.php"));
     exit;
 }
-?>
 
-<?php require(__DIR__ . "/../../../partials/nav.php"); ?>
+// 5. NOW it's safe to load nav.php
+require(__DIR__ . "/../../../partials/nav.php");
+?>
 
 <div class="container">
     <h2>Golf Tournament Details</h2>
