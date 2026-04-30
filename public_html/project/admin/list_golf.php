@@ -1,6 +1,7 @@
 <?php
-require(__DIR__ . "/../../../partials/nav.php");
+require(__DIR__ . "/../../../lib/functions.php");
 
+// Permission check BEFORE any HTML output
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
     header("Location: " . get_url("landing.php"));
@@ -8,7 +9,6 @@ if (!has_role("Admin")) {
 }
 
 $db = getDB();
-
 
 // Filters
 $filters = [];
@@ -43,18 +43,14 @@ if (!in_array($sort, $allowed_sorts)) {
 $order = $_GET["order"] ?? "DESC";
 $order = strtoupper($order) === "ASC" ? "ASC" : "DESC";
 
-
-
+// Limit
 $limit = isset($_GET["limit"]) ? (int)$_GET["limit"] : 10;
-
 if ($limit < 1 || $limit > 100) {
     $limit = 10;
 }
 
-
-
 $query = "SELECT id, tourn_id, name, start_date, end_date, is_api
-FROM `IT202-E25-Golf`";
+          FROM `IT202-E25-Golf`";
 
 if (count($filters) > 0) {
     $query .= " WHERE " . implode(" AND ", $filters);
@@ -63,8 +59,6 @@ if (count($filters) > 0) {
 $query .= " ORDER BY $sort $order";
 $query .= " LIMIT :limit";
 $params[":limit"] = $limit;
-
-
 
 $stmt = $db->prepare($query);
 
@@ -82,13 +76,14 @@ try {
 }
 ?>
 
+<?php require(__DIR__ . "/../../../partials/nav.php"); ?>
+
 <div class="container-fluid">
     <h3>List Golf Tournaments</h3>
 
     <?php if (count($results) == 0) : ?>
         <p>No results to show</p>
     <?php else : ?>
-
         <div class="golf-grid">
             <?php foreach ($results as $record) : ?>
                 <div class="golf-card">
@@ -104,7 +99,6 @@ try {
                 </div>
             <?php endforeach; ?>
         </div>
-
     <?php endif; ?>
 </div>
 
@@ -125,6 +119,4 @@ try {
     }
 </style>
 
-<?php require_once(__DIR__ . "/../../../partials/flash.php");
-
-?>
+<?php require(__DIR__ . "/../../../partials/flash.php"); ?>
