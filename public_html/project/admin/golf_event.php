@@ -1,11 +1,10 @@
 <?php
 require(__DIR__ . "/../../../lib/functions.php");
-require(__DIR__ . "/../../../partials/nav.php");
 
 // 1. Retrieve the ID from the URL
 $id = se($_GET, "id", -1, false);
 
-// 2. Validate the ID
+// 2. Validate the ID BEFORE nav.php
 if ($id < 1) {
     flash("Invalid tournament ID", "danger");
     header("Location: " . get_url("admin/list_golf.php"));
@@ -23,7 +22,7 @@ $stmt = $db->prepare($query);
 $stmt->execute([":id" => $id]);
 $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// 4. Handle missing record
+// 4. Handle missing record BEFORE nav.php
 if (!$record) {
     flash("Tournament not found", "warning");
     header("Location: " . get_url("admin/list_golf.php"));
