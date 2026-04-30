@@ -2,8 +2,6 @@
 require(__DIR__ . "/../../../lib/functions.php");
 require(__DIR__ . "/../../../partials/nav.php");
 
-
-
 // 1. Retrieve the ID from the URL
 $id = se($_GET, "id", -1, false);
 
