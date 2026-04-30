@@ -96,6 +96,11 @@ try {
                     <a href="<?php echo get_url("admin/edit_golf.php"); ?>?id=<?php se($record, "id"); ?>">
                         Edit
                     </a>
+                    <br>
+                    <a href="<?php echo get_url("admin/golf_event.php"); ?>?id=<?php se($record, "id"); ?>">
+                        View
+                    </a>
+
                 </div>
             <?php endforeach; ?>
         </div>
