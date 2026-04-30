@@ -1,5 +1,10 @@
 <?php
-require_once(__DIR__ . "/../lib/functions.php");
+require(__DIR__ . "/../../../lib/functions.php");
+var_dump($_SESSION);
+var_dump(is_logged_in());
+var_dump(has_role("Admin"));
+exit;
+
 //Note: this is to resolve cookie issues with port numbers
 $domain = $_SERVER["HTTP_HOST"];
 if (strpos($domain, ":")) {
