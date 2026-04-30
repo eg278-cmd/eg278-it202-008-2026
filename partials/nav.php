@@ -14,7 +14,6 @@ if (($localWorks && $domain == "localhost") || $domain != "localhost") {
     session_set_cookie_params([
         "lifetime" => 60 * 60,
         "path" => "$BASE_PATH",
-        //"domain" => $_SERVER["HTTP_HOST"] || "localhost",
         "domain" => $domain,
         "secure" => true,
         "httponly" => true,
@@ -46,11 +45,9 @@ session_start();
             <div class="dropdown">
                 <button class="dropbtn">Roles</button>
                 <div class="dropdown-content">
-
                     <li><a href="<?php echo get_url('admin/create_role.php'); ?>">Create Role</a></li>
                     <li><a href="<?php echo get_url('admin/list_roles.php'); ?>">List Roles</a></li>
                     <li><a href="<?php echo get_url('admin/assign_roles.php'); ?>">Assign Roles</a></li>
-
                 </div>
             </div>
         <?php endif; ?>
@@ -82,15 +79,12 @@ session_start();
 </nav>
 
 <style>
-    /* From https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp */
-    /* Navbar container */
     .navbar {
         overflow: hidden;
         background-color: #333;
         font-family: Arial;
     }
 
-    /* Links inside the navbar */
     .navbar a {
         float: left;
         font-size: 16px;
@@ -100,13 +94,11 @@ session_start();
         text-decoration: none;
     }
 
-    /* The dropdown container */
     .dropdown {
         float: left;
         overflow: hidden;
     }
 
-    /* Dropdown button */
     .dropdown .dropbtn {
         font-size: 16px;
         border: none;
@@ -115,18 +107,14 @@ session_start();
         padding: 14px 16px;
         background-color: inherit;
         font-family: inherit;
-        /* Important for vertical align on mobile phones */
         margin: 0;
-        /* Important for vertical align on mobile phones */
     }
 
-    /* Add a red background color to navbar links on hover */
     .navbar a:hover,
     .dropdown:hover .dropbtn {
         background-color: red;
     }
 
-    /* Dropdown content (hidden by default) */
     .dropdown-content {
         display: none;
         position: absolute;
@@ -136,7 +124,6 @@ session_start();
         z-index: 1;
     }
 
-    /* Links inside the dropdown */
     .dropdown-content a {
         float: none;
         color: black;
@@ -146,12 +133,10 @@ session_start();
         text-align: left;
     }
 
-    /* Add a grey background color to dropdown links on hover */
     .dropdown-content a:hover {
         background-color: #ddd;
     }
 
-    /* Show the dropdown menu on hover */
     .dropdown:hover .dropdown-content {
         display: block;
     }
