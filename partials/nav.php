@@ -10,15 +10,15 @@ $localWorks = true; //some people have issues with localhost for the cookie para
 
 //this is an extra condition added to "resolve" the localhost issue for the session cookie
 if (($localWorks && $domain == "localhost") || $domain != "localhost") {
-    session_set_cookie_params([
-        "lifetime" => 60 * 60,
-        "path" => "$BASE_PATH",
-        //"domain" => $_SERVER["HTTP_HOST"] || "localhost",
-        "domain" => $domain,
-        "secure" => true,
-        "httponly" => true,
-        "samesite" => "lax"
-    ]);
+   session_set_cookie_params([
+    "lifetime" => 60 * 60,
+    "path" => "$BASE_PATH",
+    "domain" => "",
+    "secure" => false,
+    "httponly" => true,
+    "samesite" => "lax"
+]);
+
 }
 session_start();
 
