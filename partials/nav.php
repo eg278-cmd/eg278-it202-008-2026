@@ -19,8 +19,8 @@ session_set_cookie_params([
 ]);
 
 session_start();
-// ⭐ DO NOT close PHP here — no "?>"
-?>
+//  DO NOT close PHP here — no ?>
+
 
 <!-- include css and js files -->
 <link rel="stylesheet" href="<?php echo get_url('styles.css'); ?>">
