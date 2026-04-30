@@ -1,21 +1,15 @@
 <?php
-require(__DIR__ . "/../../../lib/functions.php");
-var_dump($_SESSION);
-var_dump(is_logged_in());
-var_dump(has_role("Admin"));
-exit;
+require_once(__DIR__ . "/../lib/functions.php");
 
-//Note: this is to resolve cookie issues with port numbers
+// Note: this is to resolve cookie issues with port numbers
 $domain = $_SERVER["HTTP_HOST"];
 if (strpos($domain, ":")) {
     $domain = explode(":", $domain)[0];
 }
-$localWorks = true; //some people have issues with localhost for the cookie params
-//if you're one of those people make this false
 
-//this is an extra condition added to "resolve" the localhost issue for the session cookie
-if (($localWorks && $domain == "localhost") || $domain != "localhost") {
-   session_set_cookie_params([
+$localWorks = true;
+
+session_set_cookie_params([
     "lifetime" => 60 * 60,
     "path" => "$BASE_PATH",
     "domain" => "",
@@ -24,10 +18,7 @@ if (($localWorks && $domain == "localhost") || $domain != "localhost") {
     "samesite" => "lax"
 ]);
 
-}
 session_start();
-
-
 ?>
 <!-- include css and js files -->
 <link rel="stylesheet" href="<?php echo get_url('styles.css'); ?>">
