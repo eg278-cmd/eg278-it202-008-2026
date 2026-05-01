@@ -40,7 +40,7 @@ if (!in_array($sort, $allowed_sorts)) {
     $sort = "start_date";
 }
 
-// ORDER validation (this is the fix)
+// ORDER validation 
 $allowed_orders = ["ASC", "DESC"];
 $order = strtoupper($_GET["order"] ?? "DESC");
 
@@ -62,13 +62,17 @@ if (count($filters) > 0) {
 }
 
 $query .= " ORDER BY $sort $order";
-$query .= " LIMIT :limit";
-$params[":limit"] = $limit;
+$query .= " LIMIT $limit";
+
 
 $stmt = $db->prepare($query);
 
 foreach ($params as $key => $value) {
-    $stmt->bindValue($key, $value);
+    if ($key === ":limit") {
+        $stmt->bindValue($key, (int)$value, PDO::PARAM_INT);
+    } else {
+        $stmt->bindValue($key, $value);
+    }
 }
 
 $results = [];
@@ -107,6 +111,42 @@ try {
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
+</div>
+
+// Examples
+<hr>
+<h3>Example Entities</h3>
+<p>Examples showing additional details and edit/delete links.</p>
+
+<?php
+$example_stmt = $db->prepare("SELECT * FROM `IT202-E25-Golf` ORDER BY id DESC LIMIT 7");
+$example_stmt->execute();
+$examples = $example_stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
+<div class="example-gallery">
+<?php foreach ($examples as $row): ?>
+    <div class="example-card">
+        <h4><?php se($row["name"]); ?></h4>
+
+        <p><strong>Tournament ID:</strong> <?php se($row["tourn_id"]); ?></p>
+        <p><strong>Start Date:</strong> <?php se($row["start_date"]);  ?></p>
+        <p><strong>End Date:</strong> <?php se($row["end_date"]); ?></p>
+        <p><strong>API Row:</strong> <?php se($row["is_api"]); ?></p>
+
+        <?php if (isset($row["created"])): ?>
+            <p><strong>Created:</strong> <?php se($row["created"]); ?></p>
+        <?php endif; ?>
+
+        <?php if (isset($row["modified"])): ?>
+            <p><strong>Modified:</strong> <?php se($row["modified"]); ?></p>
+        <?php endif; ?>
+
+        <a class="btn-edit" href="<?php echo get_url("admin/edit_golf.php?id=" . $row["id"]); ?>">Edit</a>
+        <a class="btn-delete" href="#">Delete</a>
+    </div>
+<?php endforeach;
+?>
 </div>
 
 <style>
