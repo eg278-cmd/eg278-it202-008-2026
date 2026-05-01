@@ -2,16 +2,11 @@
 require(__DIR__ . "/../../../lib/functions.php");
 require(__DIR__ . "/../../../partials/nav.php");
 
-// NOW the session is active
-// NOW roles are loaded
-// NOW the Admin check will work
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
     header("Location: " . get_url("landing.php"));
     exit;
 }
-
-
 
 $db = getDB();
 
@@ -45,8 +40,13 @@ if (!in_array($sort, $allowed_sorts)) {
     $sort = "start_date";
 }
 
-$order = $_GET["order"] ?? "DESC";
-$order = strtoupper($order) === "ASC" ? "ASC" : "DESC";
+// ORDER validation (this is the fix)
+$allowed_orders = ["ASC", "DESC"];
+$order = strtoupper($_GET["order"] ?? "DESC");
+
+if (!in_array($order, $allowed_orders)) {
+    $order = "DESC";
+}
 
 // Limit
 $limit = isset($_GET["limit"]) ? (int)$_GET["limit"] : 10;
@@ -81,8 +81,6 @@ try {
 }
 ?>
 
-
-
 <div class="container-fluid">
     <h3>List Golf Tournaments</h3>
 
@@ -105,7 +103,6 @@ try {
                     <a href="<?php echo get_url("admin/golf_event.php"); ?>?id=<?php se($record, "id"); ?>">
                         View
                     </a>
-
                 </div>
             <?php endforeach; ?>
         </div>

@@ -1,7 +1,7 @@
 <?php
 require(__DIR__ . "/../../../lib/functions.php");
 
-// 1. Retrieve ID
+// 1. Retrieve ID safely
 $id = se($_GET, "id", -1, false);
 
 // 2. Validate ID BEFORE nav.php
@@ -19,8 +19,16 @@ $query = "SELECT id, tourn_id, name, start_date, end_date, is_api
           WHERE id = :id";
 
 $stmt = $db->prepare($query);
-$stmt->execute([":id" => $id]);
-$record = $stmt->fetch(PDO::FETCH_ASSOC);
+
+try {
+    $stmt->execute([":id" => $id]);
+    $record = $stmt->fetch(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    error_log("Error loading tournament: " . var_export($e, true));
+    flash("Error loading tournament details", "danger");
+    header("Location: " . get_url("admin/list_golf.php"));
+    exit;
+}
 
 // 4. Handle missing record BEFORE nav.php
 if (!$record) {
