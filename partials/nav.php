@@ -51,9 +51,9 @@ session_start();
 
         <?php if (has_role("Admin")) : ?>
             <div class="dropdown">
-                <button class="dropbtn">Stocks</button>
+                <button class="dropbtn">Golf</button>
                 <div class="dropdown-content">
-                    <li><a href="<?php echo get_url('admin/create_stock.php'); ?>">Create Stock</a></li>
+                    <li><a href="<?php echo get_url('admin/create_golf.php'); ?>">Create Golf</a></li>
                     <li><a href="<?php echo get_url('admin/list_stocks.php'); ?>">List Stock</a></li>
                 </div>
             </div>

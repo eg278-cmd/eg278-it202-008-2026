@@ -38,11 +38,11 @@ if (!empty($_GET["end_date"])) {
 }
 
 // Sorting
-$allowed_sorts = ["name", "start_date", "end_date", "created"];
-$sort = $_GET["sort"] ?? "created";
+$allowed_sorts = ["name", "start_date", "end_date", "tourn_id", "id"];
+$sort = $_GET["sort"] ?? "start_date";
 
 if (!in_array($sort, $allowed_sorts)) {
-    $sort = "created";
+    $sort = "start_date";
 }
 
 $order = $_GET["order"] ?? "DESC";

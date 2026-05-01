@@ -67,10 +67,10 @@ if (isset($_POST["action"])) {
     }
 }
 
-//TODO handle manual create stock
+//TODO handle manual create golf
 ?>
 <div class="container-fluid">
-    <h3>Create or Fetch Stock</h3>
+    <h3>Create or Fetch Golf</h3>
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <a class="nav-link bg-success" href="#" onclick="switchTab('create')">Fetch</a>
