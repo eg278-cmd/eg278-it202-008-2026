@@ -1,12 +1,17 @@
 <?php
 require(__DIR__ . "/../../../lib/functions.php");
+require(__DIR__ . "/../../../partials/nav.php");
 
-// Permission check BEFORE any HTML output
+// NOW the session is active
+// NOW roles are loaded
+// NOW the Admin check will work
 if (!has_role("Admin")) {
     flash("You don't have permission to view this page", "warning");
     header("Location: " . get_url("landing.php"));
     exit;
 }
+
+
 
 $db = getDB();
 
@@ -76,7 +81,7 @@ try {
 }
 ?>
 
-<?php require(__DIR__ . "/../../../partials/nav.php"); ?>
+
 
 <div class="container-fluid">
     <h3>List Golf Tournaments</h3>
