@@ -31,7 +31,7 @@ if ($delete_id > 0) {
       // Redirect back to the previous page 
       $redirect = $_SERVER["HTTP_REFERER"] ?? get_url("admin/list_golf.php");
       header("Location: " . $redirect);
-      exit;
+      
 }
 
 
