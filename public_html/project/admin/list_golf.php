@@ -125,8 +125,12 @@ try {
                     </a>
                     <br>
                      <a href="<?php echo get_url("admin/list_golf.php?delete_id=" . $record["id"]); ?>"
-                        onclick="return confirm('Are you sure you want to delete this tournament?');"
+                        onclick="return confirm('Are you sure you want to delete this tournament?');">
                         Delete
+                    </a>
+                    <br>
+                   
+
                     <a href="<?php echo get_url("admin/golf_event.php?id=" . $record["id"]); ?>">
                         View
                     </a>
@@ -167,10 +171,11 @@ $examples = $example_stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <a class="btn-edit" href="<?php echo get_url("admin/edit_golf.php?id=" . $row["id"]); ?>">Edit</a>
         <a class="btn-delete" 
-        href="<?php echo get_url("admin/list_golf.php?delete_id=" . $record["id"]); ?>"
-        onclick="return confirm('Are you sure you want to delete this tournament?');"
-        Delete
+        href="<?php echo get_url("admin/list_golf.php?delete_id=" . $row["id"]); ?>"
+        onclick="return confirm('Are you sure you want to delete this tournament?');">
+        Delete>
        </a>
+       
     </div>
 <?php endforeach;
 ?>
