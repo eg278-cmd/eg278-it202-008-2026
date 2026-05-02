@@ -18,7 +18,7 @@ if ($delete_id > 0) {
       if (!has_role("Admin")) {
         flash("You do not have permission to delete tournaments", "danger");
         header("Location: " . get_url("admin/list_golf.php"));
-        exit;
+        
       }
 
       // Perform the deletion
