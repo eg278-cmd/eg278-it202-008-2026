@@ -33,7 +33,9 @@ if ($delete_id > 0) {
       header("Location: " . $redirect);
       exit;
 }
-$db = getDB();
+
+
+
 
 // Filters
 $filters = [];
