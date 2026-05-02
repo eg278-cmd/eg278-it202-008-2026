@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <div class="container-fluid">
     <h3>Edit Golf Tournament</h3>
 
-    <form method="POST">
+    <form method="POST" onsubmit="return validateEditForm();">
         <div class="mb-3">
             <label for="tourn_id">Tournament ID</label>
             <input type="text" name="tourn_id" id="tourn_id" required
@@ -103,4 +103,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     </form>
 </div>
 
+<script>
+    function validateEditForm() {
+        let name = document.getElementById("name").value.trim();
+
+        if (name.length < 4) {
+            alert("Name must be at least 4 characters");
+            return false;
+        }
+
+        return true;
+    }
+    </script>
 <?php require(__DIR__ . "/../../../partials/flash.php"); ?>

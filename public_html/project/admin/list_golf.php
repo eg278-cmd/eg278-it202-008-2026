@@ -8,6 +8,26 @@ if (!has_role("Admin")) {
     exit;
 }
 
+/*** DELETE LOGIC ***/
+$delete_id = se($_GET, "delete_id", -1, false);
+
+if ($delete_id > 0) {
+
+      // Permission check
+      if (!has_role("Admin")) {
+        flash("You do not have permission to delete tournaments", "danger");
+        header("Location: " . get_url("admin/list_golf.php"));
+        exit;
+      }
+
+      // Placeholder delete logic
+      flash("Tournament deleted", "success");
+
+      // Redirect back to the previous page 
+      $redirect = $_SERVER["HTTP_REFERER"] ?? get_url("admin/list_golf.php");
+      header("Location: " . $redirect);
+      exit;
+}
 $db = getDB();
 
 // Filters
@@ -100,11 +120,14 @@ try {
                     <p><strong>End:</strong> <?php se($record["end_date"]); ?></p>
                     <p><strong>API Row:</strong> <?php se($record["is_api"]); ?></p>
 
-                    <a href="<?php echo get_url("admin/edit_golf.php"); ?>?id=<?php se($record, "id"); ?>">
+                    <a href="<?php echo get_url("admin/edit_golf.php?id=" . $record["id"]); ?>">
                         Edit
                     </a>
                     <br>
-                    <a href="<?php echo get_url("admin/golf_event.php"); ?>?id=<?php se($record, "id"); ?>">
+                     <a href="<?php echo get_url("admin/list_golf.php?delete_id=" . $record["id"]); ?>"
+                        onclick="return confirm('Are you sure you want to delete this tournament?');"
+                        Delete
+                    <a href="<?php echo get_url("admin/golf_event.php?id=" . $record["id"]); ?>">
                         View
                     </a>
                 </div>
@@ -143,7 +166,11 @@ $examples = $example_stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
 
         <a class="btn-edit" href="<?php echo get_url("admin/edit_golf.php?id=" . $row["id"]); ?>">Edit</a>
-        <a class="btn-delete" href="#">Delete</a>
+        <a class="btn-delete" 
+        href="<?php echo get_url("admin/list_golf.php?delete_id=" . $record["id"]); ?>"
+        onclick="return confirm('Are you sure you want to delete this tournament?');"
+        Delete
+       </a>
     </div>
 <?php endforeach;
 ?>
