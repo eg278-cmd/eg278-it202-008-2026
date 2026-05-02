@@ -8,6 +8,7 @@ if (!has_role("Admin")) {
     exit;
 }
 
+$db = getDB();
 /*** DELETE LOGIC ***/
 $delete_id = se($_GET, "delete_id", -1, false);
 
@@ -19,6 +20,10 @@ if ($delete_id > 0) {
         header("Location: " . get_url("admin/list_golf.php"));
         exit;
       }
+
+      // Perform the deletion
+      $stmt = $db->prepare("DELETE FROM `IT202-E25-Golf` WHERE id = :id");
+      $stmt->execute([":id" => $delete_id]);
 
       // Placeholder delete logic
       flash("Tournament deleted", "success");
@@ -173,7 +178,7 @@ $examples = $example_stmt->fetchAll(PDO::FETCH_ASSOC);
         <a class="btn-delete" 
         href="<?php echo get_url("admin/list_golf.php?delete_id=" . $row["id"]); ?>"
         onclick="return confirm('Are you sure you want to delete this tournament?');">
-        Delete>
+        Delete
        </a>
        
     </div>
