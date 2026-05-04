@@ -22,7 +22,7 @@ if (!empty($search)) {
 $query .= " ORDER BY golf.start_date ASC";
 
 $stmt = $db->prepare($query);
-$stmt->execute([":uid" => $user_id]);
+$stmt->execute($params);
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
