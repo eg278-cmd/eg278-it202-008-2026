@@ -5,11 +5,21 @@ is_logged_in(true);
 $user_id = get_user_id();
 $db = getDB();
 
+$search = $_GET["search"] ?? "";
+$params = [":uid" => $user_id];
+
 $query = "SELECT golf.id, golf.name, golf.start_date, golf.end_date, golf.tourn_id
 FROM `IT202-E25-UserGolf` usergolf
 JOIN `IT202-E25-Golf` golf ON usergolf.golf_id = golf.id
 WHERE usergolf.user_id = :uid
 AND usergolf.is_active = 1";
+
+if (!empty($search)) {
+    $query .= " AND golf.name LIKE :search";
+    $params[":search"] = "%$search%";
+}
+
+$query .= " ORDER BY golf.start_date ASC";
 
 $stmt = $db->prepare($query);
 $stmt->execute([":uid" => $user_id]);
@@ -19,6 +29,15 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="container mt-4">
     <h2>My Associated Golf Tournaments</h2>
     <p>These tournaments are associated with your account.</p>
+
+<form method="GET" class="mb-3">
+    <input type="text" name="search"
+    placeholder="Search by name..."
+    value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>"
+    class="form-control mb-2">
+
+    <button type="submit" class="btn btn-secondary">Filter</button>
+</form>
 
     <?php
     // Stats
@@ -48,7 +67,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         onclick="return confirm('Remove all associations?');">
          Remove all
         </a>
-        
+
     <?php if (empty($results)) : ?>
         <p>No results available.</p>
     <?php else : ?>
