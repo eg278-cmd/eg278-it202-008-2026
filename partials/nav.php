@@ -54,7 +54,7 @@ session_start();
                 <button class="dropbtn">Golf</button>
                 <div class="dropdown-content">
                     <li><a href="<?php echo get_url('admin/create_golf.php'); ?>">Create Golf</a></li>
-                    <li><a href="<?php echo get_url('admin/list_stocks.php'); ?>">List Stock</a></li>
+                    <li><a href="<?php echo get_url('admin/list_golf.php'); ?>">List Stock</a></li>
                 </div>
             </div>
         <?php endif; ?>
