@@ -11,7 +11,7 @@ $localWorks = true;
 
 session_set_cookie_params([
     "lifetime" => 60 * 60,
-    "path" => "$BASE_PATH",
+    "path" => "/project",
     "domain" => "",
     "secure" => false,
     "httponly"=> true,

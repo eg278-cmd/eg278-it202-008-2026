@@ -1,5 +1,5 @@
 <?php
-require(__DIR__ . "/../../lib/functions.php");
+require(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 
 $db = getDB();
@@ -22,7 +22,7 @@ $offset = ($page - 1) * $limit;
 $query = "
 SELECT golf.id, golf.name, golf.start_date, golf.end_date
 FROM `IT202-E25-Golf` golf
-WHERE GOLF.id NOT IN (
+WHERE golf.id NOT IN (
 SELECT usergolf.golf_id
 FROM `IT202-E25-UserGolf` usergolf
 WHERE usergolf.user_id = :uid
@@ -57,9 +57,15 @@ $params[":offset"] = $offset;
 
 // Results
 $stmt = $db->prepare($query);
+
 foreach ($params as $key => $value) {
-    $stmt->bindValue($key, $value);
+    if ($key === ":limit" || $key === ":offset") {
+        $stmt->bindValue($key, (int)$value, PDO::PARAM_INT);
+    } else {
+        $stmt->bindValue($key, $value);
+    }
 }
+
 $stmt->execute();
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -85,7 +91,7 @@ $stmt2 = $db->prepare($countQuery);
 $stmt2->execute($countParams);
 $total = $stmt2->fetchColumn();
 
-require(__DIR__ . "/../../partials/nav.php");
+
 ?>
 
 <div class="container mt-4">
