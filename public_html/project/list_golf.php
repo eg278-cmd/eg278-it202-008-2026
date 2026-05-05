@@ -5,7 +5,7 @@ is_logged_in(true);
 $db = getDB();
 
 
-// GET FILTERS
+// FILTERS
 
 $search = $_GET["search"] ?? "";
 $sort = $_GET["sort"] ?? "name_asc";
@@ -20,7 +20,7 @@ $offset = ($page - 1) * $limit;
 
 $params = [];
 $query = "
-SELECT g.id, g.name, g.start_date, g.end_date
+SELECT golf.id, golf.name, golf.start_date, golf.end_date
 FROM `IT202-E25-Golf` g
 WHERE 1=1
 ";
@@ -35,20 +35,20 @@ $params[":search"] = "%$search%";
 // ----------------------------
 switch ($sort) {
 case "name_desc":
-$query .= " ORDER BY g.name DESC";
+$query .= " ORDER BY golf.name DESC";
 break;
 case "start_asc":
-$query .= " ORDER BY g.start_date ASC";
+$query .= " ORDER BY golf.start_date ASC";
 break;
 case "start_desc":
-$query .= " ORDER BY g.start_date DESC";
+$query .= " ORDER BY golf.start_date DESC";
 break;
 default:
-$query .= " ORDER BY g.name ASC";
+$query .= " ORDER BY golf.name ASC";
 }
 
 // ----------------------------
-// LIMIT + OFFSET
+
 // ----------------------------
 $query .= " LIMIT :limit OFFSET :offset";
 
@@ -62,7 +62,7 @@ $stmt->execute();
 
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Count total for pagination
+// Count total in pages
 $countQuery = "
 SELECT COUNT(*) as total
 FROM `IT202-E25-Golf` g
