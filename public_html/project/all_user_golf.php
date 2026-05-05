@@ -5,7 +5,7 @@ is_logged_in(true);
 $db = getDB();
 
 // ----------------------------
-// REMOVE ALL MATCHING ASSOCIATIONS 
+// REMOVE ALL ASSOCIATIONS 
 // ----------------------------
 if (isset($_GET["remove_all"]) && $_GET["remove_all"] == "1") {
     $username = $_GET["username"] ?? "";
