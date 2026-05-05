@@ -2,33 +2,37 @@
 require(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 
-$user_id = get_user_id();
-
-// If ?all=1 is present → remove ALL
-$remove_all = isset($_GET["all"]);
-
-// If ?golf_id=### is present → remove ONE
-$golf_id = $_GET["golf_id"] ?? null;
-
 $db = getDB();
 
-if ($remove_all) {
-// Remove ALL associations for this user
-$stmt = $db->prepare("DELETE FROM `IT202-E25-UserGolf` WHERE user_id = :uid");
-$stmt->execute([":uid" => $user_id]);
+// If admin-style delete is used, use the provided user_id
+// Otherwise default to the logged-in user
+$user_id = $_GET["user_id"] ?? get_user_id();
 
-flash("All associations removed", "success");
+$golf_id = $_GET["golf_id"] ?? null;
+
+if (!$golf_id) {
+    flash("Invalid tournament", "danger");
+    redirect("my_golf_tournaments.php");
+    exit;
 }
-elseif ($golf_id) {
-// Remove ONE association
-$stmt = $db->prepare("DELETE FROM `IT202-E25-UserGolf`
-WHERE user_id = :uid AND golf_id = :gid");
+
+$stmt = $db->prepare("
+DELETE FROM `IT202-E25-UserGolf`
+WHERE user_id = :uid AND golf_id = :gid
+");
 $stmt->execute([
-":uid" => $user_id,
-":gid" => $golf_id
+    ":uid" => $user_id,
+    ":gid" => $golf_id
 ]);
 
 flash("Association removed", "success");
+
+// If admin-style delete was used, return to the all-users page
+if (isset($_GET["user_id"])) {
+    redirect("all_user_golf.php");
+    exit;
 }
 
-redirect(get_url("project/my_golf_tournaments.php"));
+// Otherwise return to the user's page
+redirect("my_golf_tournaments.php");
+exit;
