@@ -1,73 +1,133 @@
 <?php
-require_once(__DIR__ . "/../../partials/nav.php");
+require(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 
-$user_id = get_user_id();
 $db = getDB();
+$user_id = get_user_id();
 
+// ----------------------------
+// GET FILTERS
+// ----------------------------
 $search = $_GET["search"] ?? "";
+$sort = $_GET["sort"] ?? "name_asc";
+$limit = intval($_GET["limit"] ?? 10);
+$page = intval($_GET["page"] ?? 1);
+
+if ($limit < 1) $limit = 1;
+if ($limit > 100) $limit = 100;
+if ($page < 1) $page = 1;
+
+$offset = ($page - 1) * $limit;
+
 $params = [":uid" => $user_id];
 
-$query = "SELECT golf.id, golf.name, golf.start_date, golf.end_date, golf.tourn_id
+$query = "
+SELECT golf.id, golf.name, golf.start_date, golf.end_date
 FROM `IT202-E25-UserGolf` usergolf
 JOIN `IT202-E25-Golf` golf ON usergolf.golf_id = golf.id
 WHERE usergolf.user_id = :uid
-AND usergolf.is_active = 1";
+";
 
 if (!empty($search)) {
     $query .= " AND golf.name LIKE :search";
     $params[":search"] = "%$search%";
 }
 
-$query .= " ORDER BY golf.start_date ASC";
+// ----------------------------
+// SORTING
+// ----------------------------
+switch ($sort) {
+    case "name_desc":
+        $query .= " ORDER BY golf.name DESC";
+        break;
+    case "start_asc":
+        $query .= " ORDER BY golf.start_date ASC";
+        break;
+    case "start_desc":
+        $query .= " ORDER BY golf.start_date DESC";
+        break;
+    default:
+        $query .= " ORDER BY golf.name ASC";
+}
+
+// LIMIT + OFFSET
+$query .= " LIMIT :limit OFFSET :offset";
 
 $stmt = $db->prepare($query);
-$stmt->execute($params);
+foreach ($params as $key => $value) {
+    $stmt->bindValue($key, $value);
+}
+$stmt->bindValue(":limit", $limit, PDO::PARAM_INT);
+$stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
+$stmt->execute();
+
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Count total for pages
+$countQuery = "
+SELECT COUNT(*) as total
+FROM `IT202-E25-UserGolf` usergolf
+JOIN `IT202-E25-Golf` golf ON usergolf.golf_id = golf.id
+WHERE usergolf.user_id = :uid
+";
+if (!empty($search)) {
+    $countQuery .= " AND golf.name LIKE :search";
+}
+$countStmt = $db->prepare($countQuery);
+$countStmt->execute($params);
+$total = $countStmt->fetch(PDO::FETCH_ASSOC)["total"];
+$totalPages = ceil($total / $limit);
+
+// Stats
+$statsQuery = "
+SELECT
+COUNT(*) AS total_associated,
+MIN(golf.start_date) AS earliest,
+MAX(golf.start_date) AS latest
+FROM `IT202-E25-UserGolf` usergolf
+JOIN `IT202-E25-Golf` golf ON usergolf.golf_id = golf.id
+WHERE usergolf.user_id = :uid
+";
+$statsStmt = $db->prepare($statsQuery);
+$statsStmt->execute([":uid" => $user_id]);
+$stats = $statsStmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
 <div class="container mt-4">
     <h2>My Associated Golf Tournaments</h2>
+
     <p>These tournaments are associated with your account.</p>
 
-<form method="GET" class="mb-3">
-    <input type="text" name="search"
-    placeholder="Search by name..."
-    value="<?php echo htmlspecialchars($_GET['search'] ?? ''); ?>"
-    class="form-control mb-2">
+    <!-- FILTER FORM -->
+    <form method="GET" class="mb-3">
+        <input type="text" name="search" placeholder="Search by name..."
+            value="<?php echo htmlspecialchars($search); ?>"
+            class="form-control mb-2">
 
-    <button type="submit" class="btn btn-secondary">Filter</button>
-</form>
+        <select name="sort" class="form-control mb-2">
+            <option value="name_asc" <?php if ($sort == "name_asc") echo "selected"; ?>>Name (A–Z)</option>
+            <option value="name_desc" <?php if ($sort == "name_desc") echo "selected"; ?>>Name (Z–A)</option>
+            <option value="start_asc" <?php if ($sort == "start_asc") echo "selected"; ?>>Start Date (ASC)</option>
+            <option value="start_desc" <?php if ($sort == "start_desc") echo "selected"; ?>>Start Date (DESC)</option>
+        </select>
 
-    <?php
-    // Stats
-    $total = count($results);
+        <input type="number" name="limit" min="1" max="100"
+            value="<?php echo $limit; ?>"
+            class="form-control mb-2">
 
-    $earliest = null;
-    $latest = null;
+        <button type="submit" class="btn btn-primary">Apply</button>
+    </form>
 
-    if ($total > 0) {
-        $earliest = min(array_column($results, "start_date"));
-        $latest = max(array_column($results, "end_date"));
-    }
-    ?>
-    <div class="card p-3 mb-3">
-        <h5>Stats</h5>
-        <p><strong>Total Associated Tournaments:</strong> <?php echo $total; ?></p>
+    <!-- STATS -->
+    <div class="mb-3">
+        <strong>Total Associated Tournaments:</strong> <?php echo $stats["total_associated"]; ?><br>
+        <strong>Earliest Start Date:</strong> <?php echo $stats["earliest"]; ?><br>
+        <strong>Latest Start Date:</strong> <?php echo $stats["latest"]; ?>
+    </div>
 
-        <?php if ($total > 0) : ?>
-            <p><strong>Earliest Start Date:</strong> <?php echo htmlspecialchars($earliest); ?></p>
-             <p><strong>Latest Start Date:</strong> <?php echo htmlspecialchars($latest); ?></p>
-        <?php endif;
-        ?>
-     </div>
+    <a href="unassigned_all.php" class="btn btn-danger mb-3">Remove All</a>
 
-     <a href="<?php echo get_url("project/unassigned.php?all=1"); ?>"
-        class="btn btn-warning mb-3"
-        onclick="return confirm('Remove all associations?');">
-         Remove all
-        </a>
-
+    <!-- RESULTS -->
     <?php if (empty($results)) : ?>
         <p>No results available.</p>
     <?php else : ?>
@@ -76,16 +136,27 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <h4><?php echo htmlspecialchars($row["name"]); ?></h4>
                 <p>Start: <?php echo htmlspecialchars($row["start_date"]); ?></p>
                 <p>End: <?php echo htmlspecialchars($row["end_date"]); ?></p>
-                <a href="<?php echo get_url("admin/golf_event.php?id=" . $row['id']); ?>"
-                class="btn btn-primary btn-sm">
-                View Details</a>
-                <a href="<?php echo get_url("project/unassigned.php?golf_id" . $row['id']); ?>"
-                class="btn btn-danger btn-sm"
-                onclick="return confirm('Remove this association?');">
-                Remove
-                </a>
-               
+
+                <a href="<?php echo get_url("admin/golf_event.php?id=" . $row["id"]); ?>"
+                    class="btn btn-info btn-sm">View Details</a>
+
+                <a href="unassigned.php?golf_id=<?php echo $row["id"]; ?>"
+                    class="btn btn-danger btn-sm">Remove</a>
             </div>
         <?php endforeach; ?>
     <?php endif; ?>
+
+    <!-- PAGINATION -->
+    <nav>
+        <ul class="pagination mt-3">
+            <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+                <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
+                    <a class="page-link"
+                        href="?search=<?php echo urlencode($search); ?>&sort=<?php echo $sort; ?>&limit=<?php echo $limit; ?>&page=<?php echo $i; ?>">
+                        <?php echo $i; ?>
+                    </a>
+                </li>
+            <?php endfor; ?>
+        </ul>
+    </nav>
 </div>
