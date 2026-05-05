@@ -12,21 +12,21 @@ if (isset($_GET["remove_all"]) && $_GET["remove_all"] == "1") {
     $tourn_search = $_GET["search"] ?? "";
 
     $deleteQuery = "
-DELETE ug FROM `IT202-E25-UserGolf` ug
-JOIN Users u ON ug.user_id = u.id
-JOIN `IT202-E25-Golf` golf ON userg.golf_id = golf.id
+DELETE usergolf FROM `IT202-E25-UserGolf` usergolf
+JOIN Users user ON usergolf.user_id = user.id
+JOIN `IT202-E25-Golf` golf ON usergolf.golf_id = golf.id
 WHERE 1=1
 ";
 
     $deleteParams = [];
 
     if (!empty($username)) {
-        $deleteQuery .= " AND u.username LIKE :username";
+        $deleteQuery .= " AND user.username LIKE :username";
         $deleteParams[":username"] = "%" . $username . "%";
     }
 
     if (!empty($tourn_search)) {
-        $deleteQuery .= " AND g.name LIKE :tname";
+        $deleteQuery .= " AND golf.name LIKE :tname";
         $deleteParams[":tname"] = "%" . $tourn_search . "%";
     }
 
@@ -56,7 +56,7 @@ $offset = ($page - 1) * $limit;
 $params = [];
 
 // ----------------------------
-// MAIN QUERY
+// Query
 // ----------------------------
 $query = "
 SELECT
