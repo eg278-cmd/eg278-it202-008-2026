@@ -86,7 +86,7 @@ if (!empty($username)) {
 }
 
 if (!empty($tourn_search)) {
-    $query .= " AND g.name LIKE :tname";
+    $query .= " AND golf.name LIKE :tname";
     $params[":tname"] = "%" . $tourn_search . "%";
 }
 
