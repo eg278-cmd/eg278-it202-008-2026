@@ -114,7 +114,7 @@ $totalPages = ceil($total / $limit);
                 <a href="<?php echo get_url("admin/golf_event.php?id=" . $row["id"]); ?>"
                     class="btn btn-info btn-sm">View</a>
 
-                <a href="<?php echo get_url("project/assign.php?golf_id=" . $row["id"]); ?>"
+                <a href="<?php echo get_url("assign.php?golf_id=" . $row["id"]); ?>"
                     class="btn btn-success btn-sm">Assign to Me</a>
             </div>
         <?php endforeach; ?>
