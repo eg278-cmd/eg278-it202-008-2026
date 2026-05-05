@@ -93,6 +93,17 @@ $statsStmt->execute([":uid" => $user_id]);
 $stats = $statsStmt->fetch(PDO::FETCH_ASSOC);
 ?>
 
+<style>
+    /* Stronger alternating blue/white rows */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #e8f1ff !important;
+    }
+
+    .table-striped tbody tr:nth-of-type(even) {
+        background-color: #ffffff !important;
+    }
+</style>
+
 <div class="container mt-4">
     <h2>My Associated Golf Tournaments</h2>
 
@@ -127,29 +138,51 @@ $stats = $statsStmt->fetch(PDO::FETCH_ASSOC);
 
     <a href="unassigned_all.php" class="btn btn-danger mb-3">Remove All</a>
 
-    <!-- RESULTS -->
-    <?php if (empty($results)) : ?>
-        <p>No results available.</p>
-    <?php else : ?>
-        <?php foreach ($results as $row) : ?>
-            <div class="card mb-2 p-3">
-                <h4><?php echo htmlspecialchars($row["name"]); ?></h4>
-                <p>Start: <?php echo htmlspecialchars($row["start_date"]); ?></p>
-                <p>End: <?php echo htmlspecialchars($row["end_date"]); ?></p>
+    <!-- RESULTS TABLE -->
+    <table class="table table-bordered table-striped mt-3">
+        <thead class="table-primary">
+            <tr>
+                <th>Name</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th style="width: 200px;">Actions</th>
+            </tr>
+        </thead>
 
-                <a href="<?php echo get_url("admin/golf_event.php?id=" . $row["id"]); ?>"
-                    class="btn btn-info btn-sm">View Details</a>
+        <tbody>
+            <?php if (empty($results)): ?>
+                <tr>
+                    <td colspan="4" class="text-center text-muted">
+                        No results found.
+                    </td>
+                </tr>
+            <?php else: ?>
+                <?php foreach ($results as $row): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row["name"]); ?></td>
+                        <td><?php echo htmlspecialchars($row["start_date"]); ?></td>
+                        <td><?php echo htmlspecialchars($row["end_date"] ?? "NULL"); ?></td>
+                        <td>
+                            <a href="<?php echo get_url("admin/golf_event.php?id=" . $row["id"]); ?>"
+                                class="btn btn-info btn-sm">🔍 View</a>
 
-                <a href="unassigned.php?golf_id=<?php echo $row["id"]; ?>"
-                    class="btn btn-danger btn-sm">Remove</a>
-            </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
+                            <a href="<?php echo get_url("admin/edit_golf.php?id=" . $row["id"]); ?>"
+                                class="btn btn-warning btn-sm">✏️ Edit</a>
+
+                            <a href="unassigned.php?golf_id=<?php echo $row["id"]; ?>"
+                                class="btn btn-danger btn-sm">❌ Remove</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
 
     <!-- PAGINATION -->
     <nav>
         <ul class="pagination mt-3">
-            <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
+            <li class="page-item disabled"><span class="page-link">Pages:</span></li>
+            <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                 <li class="page-item <?php if ($i == $page) echo 'active'; ?>">
                     <a class="page-link"
                         href="?search=<?php echo urlencode($search); ?>&sort=<?php echo $sort; ?>&limit=<?php echo $limit; ?>&page=<?php echo $i; ?>">
