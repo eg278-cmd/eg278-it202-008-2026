@@ -223,7 +223,7 @@ $currentCount = count($results);
     <!-- REMOVE ALL MATCHING ASSOCIATIONS -->
     <?php if ($total > 0 && (!empty($username) || !empty($tourn_search))): ?>
         <div class="mb-3">
-            <a href="all_user_golf_associations.php?remove_all=1&username=<?php echo urlencode($username); ?>&search=<?php echo urlencode($tourn_search); ?>"
+            <a href="all_user_golf.php?remove_all=1&username=<?php echo urlencode($username); ?>&search=<?php echo urlencode($tourn_search); ?>"
                 class="btn btn-danger"
                 onclick="return confirm('Remove ALL matching associations?');">
                 Remove All Associations for Matching User(s)
