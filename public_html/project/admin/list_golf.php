@@ -37,23 +37,24 @@ if ($delete_id > 0) {
 
 
 
+
 // Filters
 $filters = [];
 $params = [];
 
-// Filter by name
+// Filter  name
 if (!empty($_GET["name"])) {
     $filters[] = "name LIKE :name";
     $params[":name"] = "%" . $_GET["name"] . "%";
 }
 
-// Filter by start date
+// Filter start date
 if (!empty($_GET["start_date"])) {
     $filters[] = "start_date >= :start_date";
     $params[":start_date"] = $_GET["start_date"];
 }
 
-// Filter by end date
+// Filter  end date
 if (!empty($_GET["end_date"])) {
     $filters[] = "end_date <= :end_date";
     $params[":end_date"] = $_GET["end_date"];
