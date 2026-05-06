@@ -1,7 +1,6 @@
 <?php
 require_once(__DIR__ . "/../lib/functions.php");
 
-reset_session();
 
 // Note: this is to resolve cookie issues with port numbers
 $domain = $_SERVER["HTTP_HOST"];
@@ -21,8 +20,12 @@ session_set_cookie_params([
 ]);
 
 session_start();
-//  DO NOT close PHP here — no ?>
 
+
+// Reset session AFTER session_start()
+reset_session();
+
+//  DO NOT close PHP here — no ?>
 
 <!-- include css and js files -->
 <link rel="stylesheet" href="<?php echo get_url('styles.css'); ?>">
