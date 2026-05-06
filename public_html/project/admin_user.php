@@ -43,14 +43,14 @@ $entity_search = trim($_GET["entity_search"] ?? "");
 $users = [];
 $entities = [];
 
-// User search query
+// User search 
 if ($user_search !== "") {
     $stmt = $db->prepare("SELECT id, username FROM Users WHERE username LIKE :uname LIMIT 25");
     $stmt->execute([":uname" => "%$user_search%"]);
     $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Entity search query
+// Entity search 
 if ($entity_search !== "") {
     $stmt = $db->prepare("SELECT id, name FROM `IT202-E25-Golf` WHERE name LIKE :gname LIMIT 25");
     $stmt->execute([":gname" => "%$entity_search%"]);
