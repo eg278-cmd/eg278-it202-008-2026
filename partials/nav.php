@@ -19,8 +19,8 @@ session_set_cookie_params([
     "samesite" => "lax"
 ]);
 
+// Start session before resetting it
 session_start();
-
 
 // Reset session AFTER session_start()
 reset_session();
