@@ -1,32 +1,28 @@
 <?php
 require_once(__DIR__ . "/../lib/functions.php");
-
-
-// Note: this is to resolve cookie issues with port numbers
+//Note: this is to resolve cookie issues with port numbers
 $domain = $_SERVER["HTTP_HOST"];
 if (strpos($domain, ":")) {
     $domain = explode(":", $domain)[0];
 }
+$localWorks = true; //some people have issues with localhost for the cookie params
+//if you're one of those people make this false
 
-$localWorks = true;
-
-session_set_cookie_params([
-    "lifetime" => 60 * 60,
-    "path" => "/project",
-    "domain" => "",
-    "secure" => false,
-    "httponly"=> true,
-    "samesite" => "lax"
-]);
-
-// Start session before resetting it
+//this is an extra condition added to "resolve" the localhost issue for the session cookie
+if (($localWorks && $domain == "localhost") || $domain != "localhost") {
+    session_set_cookie_params([
+        "lifetime" => 60 * 60,
+        "path" => "$BASE_PATH",
+        //"domain" => $_SERVER["HTTP_HOST"] || "localhost",
+        "domain" => $domain,
+        "secure" => true,
+        "httponly" => true,
+        "samesite" => "lax"
+    ]);
+}
 session_start();
 
-// Reset session AFTER session_start()
-reset_session();
-
-//  DO NOT close PHP here — no ?>
-
+?>
 <!-- include css and js files -->
 <link rel="stylesheet" href="<?php echo get_url('styles.css'); ?>">
 <script src="<?php echo get_url('helpers.js'); ?>"></script>
