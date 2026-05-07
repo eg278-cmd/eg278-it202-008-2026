@@ -1,4 +1,6 @@
 <?php
+ob_start();
+
 require_once(__DIR__ . "/../lib/functions.php");
 //Note: this is to resolve cookie issues with port numbers
 $domain = $_SERVER["HTTP_HOST"];
