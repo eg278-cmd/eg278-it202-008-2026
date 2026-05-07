@@ -11,6 +11,7 @@ users to register, log in, and manage their own participation in the golf tourna
 https://github.com/eg278-cmd/eg278-it202-008-2026/tree/prod
 
 ## Website Link (Render Prod):
+https://eg278-it202-008-prod.onrender.com/project/login.php
 
 ## API Link:
 https://rapidapi.com/live-golf-data-live-golf-data-default/api/live-golf-data
@@ -32,4 +33,4 @@ select it to open/view it, then copy that url for the below items -->
 - Milestone 3
   - https://github.com/eg278-cmd/eg278-it202-008-2026/blob/Milestone3/Milestone3.pdf
 - Demo Link
-  - (add youtube link to unlisted or public demo) Note you'll need to verify your youtube account to upload videos > 15mins
+  - https://youtu.be/bjfOVMjcKzw?si=gFoBTdPivFz7rCt0
