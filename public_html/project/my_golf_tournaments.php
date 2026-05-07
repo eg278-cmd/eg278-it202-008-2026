@@ -136,7 +136,7 @@ $stats = $statsStmt->fetch(PDO::FETCH_ASSOC);
         <strong>Latest Start Date:</strong> <?php echo $stats["latest"]; ?>
     </div>
 
-    <a href="unassigned_all.php" class="btn btn-danger mb-3">Remove All</a>
+    <a href="unassigned.php" class="btn btn-danger mb-3">Remove All</a>
 
     <!-- RESULTS TABLE -->
     <table class="table table-bordered table-striped mt-3">
