@@ -19,4 +19,5 @@ require(__DIR__ . "/duplicate_user_details.php");
 require(__DIR__ . "/reset_session.php");
 require(__DIR__. "/api_helpers.php");
 require(__DIR__."/golf_api.php");
+require(__DIR__ . "/db_helpers.php");
 ?>
