@@ -12,7 +12,7 @@ $golf_id = $_GET["golf_id"] ?? null;
 
 if (!$golf_id) {
     flash("Invalid tournament", "danger");
-    redirect("my_golf_tournaments.php");
+    redirect(get_url("my_golf_tournaments.php"));
     exit;
 }
 
