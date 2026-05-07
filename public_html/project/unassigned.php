@@ -12,7 +12,7 @@ $golf_id = $_GET["golf_id"] ?? null;
 
 if (!$golf_id) {
     flash("Invalid tournament", "danger");
-    redirect(get_url("my_golf_tournaments.php"));
+    header("Location: my_golf_tournaments.php");
     exit;
 }
 
@@ -29,10 +29,10 @@ flash("Association removed", "success");
 
 // If admin-style delete was used, return to the all-users page
 if (isset($_GET["user_id"])) {
-    redirect("all_user_golf.php");
+    header("Location: all_user_golf.php");
     exit;
 }
 
 // Otherwise return to the user's page
-redirect("my_golf_tournaments.php");
-exit;
+    header("Location: my_golf_tournaments.php");
+    exit;

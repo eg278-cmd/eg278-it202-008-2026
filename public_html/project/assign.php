@@ -9,8 +9,8 @@ $golf_id = $_GET["golf_id"] ?? null;
 
 if (!$golf_id) {
     flash("Invalid tournament.");
-    redirect("list_golf.php");
-    exit;
+     header("Location: list_golf.php");
+     exit;
 }
 
 // Check if already assigned
@@ -25,7 +25,7 @@ $check->execute([
 
 if ($check->fetch()) {
     flash("You already assigned this tournament.");
-    redirect("my_golf_tournaments.php");
+    header("Location: my_golf_tournaments.php");
     exit;
 }
 
@@ -45,5 +45,5 @@ try {
     flash("Error assigning tournament.");
 }
 
-redirect("my_golf_tournaments.php");
-exit;
+    header("Location: my_golf_tournaments.php");
+    exit;
