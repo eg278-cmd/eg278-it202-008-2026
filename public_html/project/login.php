@@ -111,7 +111,7 @@ if (isset($_POST["email"], $_POST["password"])) {
                         //save roles or empty array
                         $_SESSION["user"]["roles"] = isset($roles) ? $roles : [];
 
-                         (header("Location: landing.php"));
+                         header("Location: landing.php");
                          exit;
                     } else {
                         //echo "Invalid password<br>";
