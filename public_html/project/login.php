@@ -112,6 +112,7 @@ if (isset($_POST["email"], $_POST["password"])) {
                         $_SESSION["user"]["roles"] = isset($roles) ? $roles : [];
 
                          (header("Location: landing.php"));
+                         exit;
                     } else {
                         //echo "Invalid password<br>";
                         $ambigify = true; // ambiguous login attempt
